@@ -1,10 +1,11 @@
 # HTTP
 
 > ## Sucesso
-1. Request com verbo http válido (post)
+1. ✔ Request com verbo http válido (post)
 2. Passar nos headers o content type JSON
-3. 0k - 200 e resposta com dados
-4. No Content - 204 e resposta sem dados
+3. Chamaer request com o body correto
+4. 0k - 200 e resposta com dados
+5. No Content - 204 e resposta sem dados
 
 > ## Erros
 1. Bad Request - 400

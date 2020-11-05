@@ -41,9 +41,12 @@ class App extends StatelessWidget {
         buttonTheme: ButtonThemeData(
             minWidth: double.infinity,
             height: 50,
-            colorScheme: ColorScheme.light(primary: primaryColor),
+            colorScheme: ColorScheme.light(
+              primary: primaryColor,
+            ),
             buttonColor: primaryColor,
             splashColor: primaryColorLight,
+            disabledColor: primaryColorLight,
             padding: EdgeInsets.symmetric(
               vertical: 10,
               horizontal: 20,

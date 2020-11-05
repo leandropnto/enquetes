@@ -27,11 +27,18 @@ class HttpAdapter {
 }
 
 void main() {
+  Client client;
+  HttpAdapter sut;
+  String url;
+
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    url = faker.internet.httpUrl();
+  });
+
   group('post', () {
-    test('Shoul call post with correct values', () async {
-      final client = ClientSpy();
-      final sut = HttpAdapter(client);
-      var url = faker.internet.httpUrl();
+    test('Should call post with correct values', () async {
       await sut.request(url: url, method: 'post');
 
       verify(

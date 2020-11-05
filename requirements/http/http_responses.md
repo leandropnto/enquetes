@@ -3,7 +3,7 @@
 > ## Sucesso
 1. ✔ Request com verbo http válido (post)
 2. ✔ Passar nos headers o content type JSON
-3. Chamaer request com o body correto
+3. ✔ Chamar request com o body correto
 4. 0k - 200 e resposta com dados
 5. No Content - 204 e resposta sem dados
 

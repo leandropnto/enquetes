@@ -26,15 +26,19 @@ class HttpAdapter implements HttpClient {
 
   Future<Response> _createResponse(String method, String url,
       Map<String, String> headers, String jsonBody) async {
-    switch (method) {
-      case 'post':
-        return await client.post(
-          url,
-          headers: headers,
-          body: jsonBody,
-        );
-      default:
-        return Response('', 500);
+    try {
+      switch (method) {
+        case 'post':
+          return await client.post(
+            url,
+            headers: headers,
+            body: jsonBody,
+          );
+        default:
+          return Response('', 500);
+      }
+    } catch (e) {
+      throw HttpError.serverError;
     }
   }
 

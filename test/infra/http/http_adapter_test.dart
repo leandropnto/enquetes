@@ -1,9 +1,9 @@
 import 'package:enquetes/data/http/http.dart';
 import 'package:enquetes/infra/http/http.dart';
 import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 
 class ClientSpy extends Mock implements Client {}
 
@@ -132,6 +132,17 @@ void main() {
       final future = sut.request(url: url, method: 'post');
 
       expect(future, throwsA(HttpError.notFound));
+    });
+  });
+
+  group('shared', () {
+    test('Should throw ServerErro if invalid method is provided', () async {
+      final future = sut.request(
+        url: url,
+        method: 'invalid_method',
+      );
+
+      expect(future, throwsA(HttpError.serverError));
     });
   });
 }

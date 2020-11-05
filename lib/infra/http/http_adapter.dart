@@ -19,13 +19,23 @@ class HttpAdapter implements HttpClient {
       'accept': 'application/json',
     };
     final jsonBody = body != null ? jsonEncode(body) : null;
-    final response = await client.post(
-      url,
-      headers: headers,
-      body: jsonBody,
-    );
+    final response = await _createResponse(method, url, headers, jsonBody);
 
     return _handleResponse(response);
+  }
+
+  Future<Response> _createResponse(String method, String url,
+      Map<String, String> headers, String jsonBody) async {
+    switch (method) {
+      case 'post':
+        return await client.post(
+          url,
+          headers: headers,
+          body: jsonBody,
+        );
+      default:
+        return Response('', 500);
+    }
   }
 
   _handleResponse(Response response) {

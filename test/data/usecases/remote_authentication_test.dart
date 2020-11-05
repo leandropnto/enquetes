@@ -22,7 +22,7 @@ void main() {
     final params = AuthenticationParams(
         email: faker.internet.email(), secret: faker.internet.password());
 
-    await sut.auth(params);
+    await sut.auth(RemoteAuthenticationParams.fromDomain(params));
 
     verify(httpClient.request(
         url: url,

@@ -1,16 +1,23 @@
+import 'package:enquetes/domain/entities/account_entity.dart';
+import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../domain/usecases/authentication.dart';
+import '../../domain/usecases/usecases.dart';
 import '../http/http.dart';
 
-class RemoteAuthentication {
+class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
   final String url;
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<void> auth(RemoteAuthenticationParams params) async {
-    await httpClient.request(url: url, method: 'post', body: params.toJson());
+  Future<AccountEntity> auth(AuthenticationParams params) async {
+    final body = RemoteAuthenticationParams.fromDomain(params).toJson();
+    try {
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 

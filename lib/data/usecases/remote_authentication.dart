@@ -1,3 +1,4 @@
+import 'package:enquetes/data/models/models.dart';
 import 'package:enquetes/domain/entities/account_entity.dart';
 import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +17,7 @@ class RemoteAuthentication implements Authentication {
     try {
       final httpResponse =
           await httpClient.request(url: url, method: 'post', body: body);
-      return AccountEntity(httpResponse['accessToken']);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
       throw error == HttpError.unauthorized
           ? DomainError.invalidCredentials

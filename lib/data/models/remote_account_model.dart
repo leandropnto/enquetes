@@ -1,5 +1,5 @@
 import '../../domain/entities/entities.dart';
-import '../../domain/helpers/helpers.dart';
+import '../http/http.dart';
 
 class RemoteAccountModel {
   final String accessToken;
@@ -9,7 +9,7 @@ class RemoteAccountModel {
   factory RemoteAccountModel.fromJson(Map json) =>
       json.containsKey('accessToken')
           ? RemoteAccountModel(json['accessToken'])
-          : throw DomainError.invalidCredentials;
+          : throw HttpError.invalidData;
 
   AccountEntity toEntity() => AccountEntity(accessToken);
 }

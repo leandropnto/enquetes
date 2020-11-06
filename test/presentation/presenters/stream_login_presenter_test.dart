@@ -58,7 +58,7 @@ void main() {
     });
   });
 
-  group('password', () {
+  group('Password', () {
     test('Should call validation with correct password', () {
       sut.validatePassword(password);
       verify(validation.validate(field: 'password', value: password)).called(1);
@@ -85,6 +85,40 @@ void main() {
           .listen(expectAsync1((isValid) => expect(isValid, false)));
 
       sut.validatePassword(password);
+      sut.validatePassword(password);
+    });
+  });
+
+  group('Email & Password', () {
+    test('Should emit email error and password null  if email is invalid', () {
+      mockValidation(field: 'email', value: 'error');
+
+      sut.emailErrorStream
+          .listen(expectAsync1((error) => expect(error, 'error')));
+
+      sut.passwordErrorStream
+          .listen(expectAsync1((error) => expect(error, null)));
+
+      sut.isFormValidStream
+          .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+      sut.validateEmail(email);
+      sut.validatePassword(password);
+    });
+
+    test('Should emit password error and email null  if password is invalid',
+        () {
+      mockValidation(field: 'password', value: 'error');
+
+      sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+      sut.passwordErrorStream
+          .listen(expectAsync1((error) => expect(error, 'error')));
+
+      sut.isFormValidStream
+          .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+      sut.validateEmail(email);
       sut.validatePassword(password);
     });
   });

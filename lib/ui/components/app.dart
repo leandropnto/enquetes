@@ -12,6 +12,7 @@ class App extends StatelessWidget {
     final primaryColor = Color.fromRGBO(136, 14, 70, 1);
     final primaryColorDark = Color.fromRGBO(96, 0, 39, 1);
     final primaryColorLight = Color.fromRGBO(188, 71, 123, 1);
+    final primaryColorDisabled = Color.fromRGBO(188, 71, 123, .4);
 
     return MaterialApp(
       title: 'Enquetes ForDev',
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: primaryColorDark,
           ),
+          button: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: UnderlineInputBorder(
@@ -43,10 +45,11 @@ class App extends StatelessWidget {
             height: 50,
             colorScheme: ColorScheme.light(
               primary: primaryColor,
+              onSurface: primaryColorDisabled,
             ),
             buttonColor: primaryColor,
             splashColor: primaryColorLight,
-            disabledColor: primaryColorLight,
+            disabledColor: primaryColorDisabled,
             padding: EdgeInsets.symmetric(
               vertical: 10,
               horizontal: 20,

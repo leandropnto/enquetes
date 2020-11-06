@@ -1,8 +1,8 @@
 import 'package:enquetes/presentation/presenters/presenters.dart';
 import 'package:enquetes/presentation/protocols/protocols.dart';
 import 'package:faker/faker.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
@@ -24,7 +24,7 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
-    email = faker.internet.password();
+    password = faker.internet.password();
     mockValidation();
   });
 
@@ -119,6 +119,18 @@ void main() {
           .listen(expectAsync1((isValid) => expect(isValid, false)));
 
       sut.validateEmail(email);
+      sut.validatePassword(password);
+    });
+
+    test('Should emit password and email null  if both of them are valid',
+        () async {
+      sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+      sut.passwordErrorStream
+          .listen(expectAsync1((error) => expect(error, null)));
+
+      expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
+      sut.validateEmail(email);
+      await Future.delayed(Duration.zero);
       sut.validatePassword(password);
     });
   });

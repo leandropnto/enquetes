@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -23,7 +24,7 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   children: [
                     StreamBuilder<String>(
-                        stream: presenter.emailErrorStream,
+                        stream: presenter?.emailErrorStream,
                         builder: (context, snapshot) {
                           return TextFormField(
                             decoration: InputDecoration(
@@ -43,7 +44,7 @@ class LoginPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 32),
                       child: StreamBuilder<String>(
-                          stream: presenter.passwordErrorStream,
+                          stream: presenter?.passwordErrorStream,
                           builder: (context, snapshot) {
                             return TextFormField(
                               decoration: InputDecoration(
@@ -63,7 +64,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     StreamBuilder<bool>(
                       initialData: false,
-                      stream: presenter.isFormValidStream,
+                      stream: presenter?.isFormValidStream,
                       builder: (context, snapshot) {
                         return RaisedButton(
                           onPressed: snapshot.data ? () {} : null,

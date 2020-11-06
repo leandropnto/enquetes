@@ -63,11 +63,11 @@ class LoginPage extends StatelessWidget {
                           }),
                     ),
                     StreamBuilder<bool>(
-                      initialData: false,
-                      stream: presenter?.isFormValidStream,
+                      stream: presenter.isFormValidStream,
                       builder: (context, snapshot) {
                         return RaisedButton(
-                          onPressed: snapshot.data ? () {} : null,
+                          onPressed:
+                              snapshot.data == true ? presenter.auth : null,
                           child: Text('ENTRAR'),
                         );
                       },

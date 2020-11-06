@@ -53,7 +53,7 @@ void main() {
       emailTextChildren,
       findsOneWidget,
       reason:
-          'When a TextFormField has only one text child, means it has no erros, since one of the childs is always the label text',
+          'When a TextFormField has only one text child, means it has no erros, since one of the children is always the label text',
     );
 
     final passwordTextChildren = find.descendant(
@@ -63,7 +63,7 @@ void main() {
       passwordTextChildren,
       findsOneWidget,
       reason:
-          'When a TextFormField has only one text child, means it has no erros, since one of the childs is always the label text',
+          'When a TextFormField has only one text child, means it has no erros, since one of the children is always the label text',
     );
   });
 
@@ -181,5 +181,23 @@ void main() {
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call authentication on form submit',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    // isFormValidController.add(true);
+    // await tester.pump();
+    // await tester.tap(find.byType(RaisedButton));
+    // await tester.pump();
+    // verify(presenter.auth()).called(1);
+
+    isFormValidController.add(true);
+    await tester.pump();
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(button.onPressed, isNotNull);
+    button.onPressed();
+    verify(presenter.auth()).called(1);
   });
 }

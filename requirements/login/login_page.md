@@ -16,5 +16,5 @@
 13. ✓ Chamar o método de autenticar.
 14. ✓ Exibir mensagem de erro caso o login falhe.
 15. ✓ Esconder o 'Loading' no fim da ação de login.
-16. Fechar stream quando a página for encerrada.
+16. ✓ Fechar stream quando a página for encerrada.
 

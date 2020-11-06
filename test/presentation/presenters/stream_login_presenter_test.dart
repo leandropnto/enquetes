@@ -1,13 +1,10 @@
 import 'dart:async';
 
+import 'package:enquetes/presentation/protocols/protocols.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-
-abstract class Validation {
-  String validate({@required String field, @required String value});
-}
 
 class ValidationSpy extends Mock implements Validation {}
 

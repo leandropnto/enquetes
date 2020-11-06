@@ -71,6 +71,8 @@ void main() {
       reason:
           'When a TextFormField has only one text child, means it has no erros, since one of the children is always the label text',
     );
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('Should start with login button disabled',
@@ -213,5 +215,17 @@ void main() {
     isLoadingController.add(true);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('Should hide loading on auth', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    isLoadingController.add(false);
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }

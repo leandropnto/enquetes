@@ -30,8 +30,10 @@ void main() {
     email = faker.internet.email();
   });
 
-  test('Should call validation with correct email', () {
-    sut.validateEmail(email);
-    verify(validation.validate(field: 'email', value: email)).called(1);
+  group('Email', () {
+    test('Should call validation with correct email', () {
+      sut.validateEmail(email);
+      verify(validation.validate(field: 'email', value: email)).called(1);
+    });
   });
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import 'components/components.dart';
@@ -49,21 +48,18 @@ class _LoginPageState extends State<LoginPage> {
                 HeadLine1(text: "BEM-VINDO AO\nENQUETES"),
                 Padding(
                   padding: const EdgeInsets.all(32),
-                  child: Provider(
-                    create: (_) => widget.presenter,
-                    child: Form(
-                      child: Column(
-                        children: [
-                          EmailInput(),
-                          PasswordInput(),
-                          LoginButton(),
-                          FlatButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.person),
-                            label: Text('CRIAR CONTA'),
-                          )
-                        ],
-                      ),
+                  child: Form(
+                    child: Column(
+                      children: [
+                        EmailInput(),
+                        PasswordInput(),
+                        LoginButton(),
+                        FlatButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.person),
+                          label: Text('CRIAR CONTA'),
+                        )
+                      ],
                     ),
                   ),
                 ),

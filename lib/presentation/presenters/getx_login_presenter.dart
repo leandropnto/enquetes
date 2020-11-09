@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:enquetes/domain/helpers/domain_error.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
+import 'package:enquetes/ui/pages/pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
 
-class GetxLoginPresenter extends GetxController {
+class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
 
@@ -32,8 +33,8 @@ class GetxLoginPresenter extends GetxController {
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxLoginPresenter({
-    @required this.validation,
     @required this.authentication,
+    @required this.validation,
   });
 
   void _validateForm() {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../login_presenter.dart';
 
 class PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final presenter = Provider.of<LoginPresenter>(context);
+    final presenter = Get.find<LoginPresenter>();
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 32),
       child: StreamBuilder<String>(

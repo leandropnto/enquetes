@@ -4,11 +4,15 @@ import 'package:test/test.dart';
 class EmailValidation implements FieldValidation {
   final String field;
 
+  static final regexp = RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$");
+
   EmailValidation(this.field);
 
   @override
   String validate(String value) {
-    return null;
+    return value?.isNotEmpty != true || regexp.hasMatch(value)
+        ? null
+        : "E-mail inválido";
   }
 }
 
@@ -28,5 +32,9 @@ void main() {
 
   test('Should return null if is valid', () {
     expect(sut.validate("leandro.pnto@gmail.com"), null);
+  });
+
+  test('Should return error if is valid', () {
+    expect(sut.validate("leandro.pnto"), 'E-mail inválido');
   });
 }

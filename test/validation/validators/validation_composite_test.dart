@@ -10,7 +10,12 @@ class ValidationComposite implements Validation {
 
   @override
   String validate({String field, String value}) {
-    return null;
+    return validations
+        .map((validation) => validation.validate(value))
+        .firstWhere(
+          (element) => element?.isNotEmpty == true,
+          orElse: () => null,
+        );
   }
 }
 
@@ -20,6 +25,7 @@ void main() {
   FieldValidationSpy validation1;
   FieldValidationSpy validation2;
   FieldValidationSpy validation3;
+  ValidationComposite sut;
 
   void mockValidation1(String error) {
     when(validation1.validate(any)).thenReturn(error);
@@ -43,11 +49,21 @@ void main() {
     validation3 = FieldValidationSpy();
     when(validation3.field).thenReturn('other_field');
     mockValidation3(null);
+    sut = ValidationComposite([validation1, validation2, validation3]);
   });
   test('Should return null if all validations returns null or empty', () {
-    final sut = ValidationComposite([validation1, validation2, validation3]);
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
     expect(error, null);
+  });
+
+  test('Should return the first error', () {
+    mockValidation1('error_1');
+    mockValidation2('error_2');
+    mockValidation3('error_3');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, 'error_1');
   });
 }

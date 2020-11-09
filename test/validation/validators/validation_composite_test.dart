@@ -11,6 +11,7 @@ class ValidationComposite implements Validation {
   @override
   String validate({String field, String value}) {
     return validations
+        .where((validation) => validation.field == field)
         .map((validation) => validation.validate(value))
         .firstWhere(
           (element) => element?.isNotEmpty == true,
@@ -36,12 +37,12 @@ void main() {
   }
 
   void mockValidation3(String error) {
-    when(validation2.validate(any)).thenReturn(error);
+    when(validation3.validate(any)).thenReturn(error);
   }
 
   setUp(() {
     validation1 = FieldValidationSpy();
-    when(validation1.field).thenReturn('any_field');
+    when(validation1.field).thenReturn('other_field');
     mockValidation1(null);
     validation2 = FieldValidationSpy();
     when(validation2.field).thenReturn('any_field');
@@ -64,6 +65,6 @@ void main() {
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
-    expect(error, 'error_1');
+    expect(error, 'error_2');
   });
 }

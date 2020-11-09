@@ -1,6 +1,8 @@
-import 'package:enquetes/validation/protocols/protocols.dart';
+import 'package:equatable/equatable.dart';
 
-class RequiredFieldValidation implements FieldValidation {
+import '../protocols/protocols.dart';
+
+class RequiredFieldValidation extends Equatable implements FieldValidation {
   final String field;
 
   RequiredFieldValidation(this.field);
@@ -9,4 +11,7 @@ class RequiredFieldValidation implements FieldValidation {
   String validate(String value) {
     return value?.isNotEmpty == true ? null : 'Campo Obrigatório';
   }
+
+  @override
+  List<Object> get props => [field];
 }

@@ -1,6 +1,8 @@
-import 'package:enquetes/validation/protocols/protocols.dart';
+import 'package:equatable/equatable.dart';
 
-class EmailValidation implements FieldValidation {
+import '../protocols/protocols.dart';
+
+class EmailValidation extends Equatable implements FieldValidation {
   final String field;
 
   static final regexp = RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$");
@@ -13,4 +15,7 @@ class EmailValidation implements FieldValidation {
         ? null
         : "E-mail inválido";
   }
+
+  @override
+  List<Object> get props => [field];
 }

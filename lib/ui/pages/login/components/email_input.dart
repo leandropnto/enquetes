@@ -11,6 +11,7 @@ class EmailInput extends StatelessWidget {
       stream: presenter.emailErrorStream,
       builder: (context, snapshot) {
         return TextFormField(
+          autocorrect: false,
           decoration: InputDecoration(
             labelText: 'Email',
             icon: Icon(

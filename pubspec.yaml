@@ -14,6 +14,7 @@ dependencies:
   http:
   provider:
   equatable:
+  get:
 
 
   cupertino_icons: ^0.1.3

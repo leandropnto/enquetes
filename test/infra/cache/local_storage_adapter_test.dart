@@ -26,9 +26,9 @@ void main() {
   String value;
   String key;
   //Mocks
-  void mockWrite() {
+  void mockSaveSecureWriteError() {
     when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
-        .thenAnswer((_) => null);
+        .thenThrow(Exception());
   }
   //helpers
 
@@ -44,5 +44,11 @@ void main() {
     await sut.saveSecure(key: key, value: value);
 
     verify(secureStorage.write(key: key, value: value)).called(1);
+  });
+
+  test('Should throw is Save Secure throws', () async {
+    mockSaveSecureWriteError();
+    final future = sut.saveSecure(key: key, value: value);
+    expect(future, throwsA(TypeMatcher<Exception>()));
   });
 }

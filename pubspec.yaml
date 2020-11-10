@@ -14,6 +14,7 @@ dependencies:
   http:
   equatable:
   get:
+  flutter_secure_storage:
 
 
   cupertino_icons: ^0.1.3

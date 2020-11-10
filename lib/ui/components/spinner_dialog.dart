@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showLoading(BuildContext context) {
+void showLoading(BuildContext context, {String message = "Aguarde..."}) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -14,7 +14,7 @@ void showLoading(BuildContext context) {
               height: 10,
             ),
             Text(
-              'Aguarde...',
+              message,
               textAlign: TextAlign.center,
             ),
           ],

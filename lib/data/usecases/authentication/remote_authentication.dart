@@ -3,8 +3,8 @@ import 'package:enquetes/domain/entities/account_entity.dart';
 import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../domain/usecases/usecases.dart';
-import '../http/http.dart';
+import '../../../domain/usecases/usecases.dart';
+import '../../http/http.dart';
 
 class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;

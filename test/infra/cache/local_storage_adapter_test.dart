@@ -22,6 +22,10 @@ void main() {
     when(secureStorage.read(key: anyNamed('key')))
         .thenAnswer((_) async => value);
   }
+
+  void mockFetchSecureError() {
+    when(secureStorage.read(key: anyNamed('key'))).thenThrow(Exception());
+  }
   //helpers
 
   //setup
@@ -60,6 +64,12 @@ void main() {
       final fetchedValue = await sut.fetchSecure(key);
 
       expect(fetchedValue, value);
+    });
+
+    test('Should throw if FetchSecure throws', () async {
+      mockFetchSecureError();
+      final future = sut.fetchSecure(key);
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }

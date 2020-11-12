@@ -28,27 +28,27 @@ void main() {
   });
 
   test('Should call loadCurrent account', () async {
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
     verify(loadCurrentAccount.load()).called(1);
   });
 
   test('Should go to surveys page on success', () async {
     sut.navigateToStream
         .listen(expectAsync1((value) => expect(value, "/surveys")));
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on null result', () async {
     mockLoadAccount(null);
     sut.navigateToStream
         .listen(expectAsync1((value) => expect(value, "/login")));
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to login page on null result', () async {
     mockLoadAccountError();
     sut.navigateToStream
         .listen(expectAsync1((value) => expect(value, "/login")));
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 }

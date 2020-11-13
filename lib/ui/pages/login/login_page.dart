@@ -1,8 +1,8 @@
-import 'package:enquetes/utilis/i18n/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../components/components.dart';
+import '../../helpers/helpers.dart';
 import 'components/components.dart';
 import 'login_presenter.dart';
 
@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         widget.presenter.navigateStream.listen((page) => Get.offAllNamed(page));
         widget.presenter.mainErrorStream.listen((error) {
           if (error != null) {
-            showErrorMessage(context, error);
+            showErrorMessage(context, error.description);
           }
         });
         return GestureDetector(

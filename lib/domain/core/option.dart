@@ -1,4 +1,6 @@
-abstract class Option<T> {
+import 'package:equatable/equatable.dart';
+
+abstract class Option<T> extends Equatable {
   T _value;
 
   R fold<R>({R Function() ifNone, R Function(T value) ifSome}) {
@@ -28,6 +30,12 @@ abstract class Option<T> {
   Option<T> some<T>(T value) => Some(value);
 
   Option none() => None();
+
+  bool get isSome => _value != null;
+  bool get isNone => _value == null;
+
+  @override
+  List<Object> get props => [_value];
 }
 
 class Some<T> extends Option<T> {
@@ -45,4 +53,8 @@ class None<T> extends Option<T> {
 
   @override
   T get value => throw Exception("Empty Option exception");
+}
+
+extension OptionExt on String {
+  Option<String> some() => Some(this);
 }

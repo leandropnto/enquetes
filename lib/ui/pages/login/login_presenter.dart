@@ -1,9 +1,11 @@
+import 'package:enquetes/ui/helpers/errors/ui_error.dart';
+
 abstract class LoginPresenter {
-  Stream<String> get emailErrorStream;
+  Stream<UIError> get emailErrorStream;
 
-  Stream<String> get passwordErrorStream;
+  Stream<UIError> get passwordErrorStream;
 
-  Stream<String> get mainErrorStream;
+  Stream<UIError> get mainErrorStream;
 
   Stream<bool> get isFormValidStream;
 

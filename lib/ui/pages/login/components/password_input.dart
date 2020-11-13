@@ -1,3 +1,4 @@
+import 'package:enquetes/ui/helpers/errors/ui_error.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +10,7 @@ class PasswordInput extends StatelessWidget {
     final presenter = Get.find<LoginPresenter>();
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 32),
-      child: StreamBuilder<String>(
+      child: StreamBuilder<UIError>(
         stream: presenter.passwordErrorStream,
         builder: (context, snapshot) {
           return TextFormField(
@@ -19,7 +20,7 @@ class PasswordInput extends StatelessWidget {
                 Icons.lock,
                 color: Theme.of(context).primaryColorLight,
               ),
-              errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+              errorText: snapshot.hasData ? snapshot.data.description : null,
             ),
             obscureText: true,
             onChanged: presenter.validatePassword,

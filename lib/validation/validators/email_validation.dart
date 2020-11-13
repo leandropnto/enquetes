@@ -1,3 +1,5 @@
+import 'package:enquetes/domain/core/option.dart';
+import 'package:enquetes/presentation/protocols/protocols.dart';
 import 'package:equatable/equatable.dart';
 
 import '../protocols/protocols.dart';
@@ -10,10 +12,10 @@ class EmailValidation extends Equatable implements FieldValidation {
   EmailValidation(this.field);
 
   @override
-  String validate(String value) {
+  Option<ValidationError> validate(String value) {
     return value?.isNotEmpty != true || regexp.hasMatch(value)
-        ? null
-        : "E-mail inválido";
+        ? None()
+        : Some(ValidationError.invalidField);
   }
 
   @override

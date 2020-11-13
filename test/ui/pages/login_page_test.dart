@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:enquetes/ui/helpers/helpers.dart';
 import 'package:enquetes/ui/pages/login/login_page.dart';
 import 'package:enquetes/ui/pages/pages.dart';
 import 'package:faker/faker.dart';
@@ -12,18 +13,20 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
   LoginPresenter presenter;
-  StreamController<String> emailErrorController;
-  StreamController<String> passwordErrorController;
+  StreamController<UIError> emailErrorController;
+  StreamController<UIError> passwordErrorController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
-  StreamController<String> mainErrorController;
+  StreamController<UIError> mainErrorController;
+  StreamController<String> navigationController;
 
   void initStreams() {
-    emailErrorController = StreamController<String>();
-    passwordErrorController = StreamController<String>();
+    emailErrorController = StreamController<UIError>();
+    passwordErrorController = StreamController<UIError>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
-    mainErrorController = StreamController<String>();
+    mainErrorController = StreamController<UIError>();
+    navigationController = StreamController<String>();
   }
 
   void mockStreams() {
@@ -41,6 +44,9 @@ void main() {
 
     when(presenter.mainErrorStream)
         .thenAnswer((_) => mainErrorController.stream);
+
+    when(presenter.navigateStream)
+        .thenAnswer((_) => navigationController.stream);
   }
 
   void closeStreams() {
@@ -49,6 +55,7 @@ void main() {
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
+    navigationController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -122,10 +129,20 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    emailErrorController.add('any error');
+    emailErrorController.add(UIError.invalidField);
     await tester.pump();
 
-    expect(find.text('any error'), findsOneWidget);
+    expect(find.text('Campo inválido'), findsOneWidget);
+  });
+
+  testWidgets('Should present error if email is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
   testWidgets('Should present no error if email is valid',
@@ -141,27 +158,14 @@ void main() {
         findsOneWidget);
   });
 
-  testWidgets('Should present no error if email is valid',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    emailErrorController.add('');
-    await tester.pump();
-
-    expect(
-        find.descendant(
-            of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-        findsOneWidget);
-  });
-
   testWidgets('Should present error if password is invalid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    passwordErrorController.add('any error');
+    passwordErrorController.add(UIError.requiredField);
     await tester.pump();
 
-    expect(find.text('any error'), findsOneWidget);
+    expect(find.text('Campo obrigatório'), findsOneWidget);
   });
 
   testWidgets('Should present no error if password is valid',
@@ -169,19 +173,6 @@ void main() {
     await loadPage(tester);
 
     passwordErrorController.add(null);
-    await tester.pump();
-
-    expect(
-        find.descendant(
-            of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
-        findsOneWidget);
-  });
-
-  testWidgets('Should present no error if password is valid',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    passwordErrorController.add('');
     await tester.pump();
 
     expect(
@@ -201,7 +192,7 @@ void main() {
     expect(button.onPressed, isNotNull);
   });
 
-  testWidgets('Should disable button if form is not valid',
+  testWidgets('Should disable button if form is invalid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -254,10 +245,11 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    mainErrorController.add("Main Error");
+    mainErrorController.add(UIError.unexpected);
     await tester.pump();
 
-    expect(find.text("Main Error"), findsOneWidget);
+    expect(find.text("Ops... Ocorreu um erro. Por favor, tente novamente"),
+        findsOneWidget);
   });
 
   // testWidgets('Should close streams on dispose', (WidgetTester tester) async {

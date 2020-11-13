@@ -1,3 +1,4 @@
+import 'package:enquetes/utilis/i18n/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                         FlatButton.icon(
                           onPressed: () {},
                           icon: Icon(Icons.person),
-                          label: Text('CRIAR CONTA'),
+                          label: Text(R.strings.addAccount),
                         )
                       ],
                     ),

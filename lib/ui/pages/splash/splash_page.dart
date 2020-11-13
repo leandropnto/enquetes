@@ -17,8 +17,28 @@ class SplashPage extends StatelessWidget {
         builder: (context) {
           presenter.navigateToStream.listen((route) =>
               route?.isNotEmpty == true ? Get.offAllNamed(route) : () {});
-          return Center(
-            child: CircularProgressIndicator(),
+          return Container(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "4DEV...",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: CircularProgressIndicator(),
+                ),
+                Text(
+                  "carregando...",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              ],
+            ),
           );
         },
       ),

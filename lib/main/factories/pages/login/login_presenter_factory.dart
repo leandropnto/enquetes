@@ -1,7 +1,7 @@
-import '../../../../presentation/presenters/presenters.dart';
-import '../../../../ui/pages/login/login_presenter.dart';
-import '../../usecases/authentication_factory.dart';
-import 'login.dart';
+import 'package:enquetes/presentation/presenters/presenters.dart';
+import 'package:enquetes/ui/pages/pages.dart';
+
+import '../../factories.dart';
 
 LoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
       authentication: makeRemoteAuthentication(),
@@ -11,4 +11,5 @@ LoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
 LoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
       authentication: makeRemoteAuthentication(),
       validation: makeLoginValidation(),
+      saveCurrentAccount: makeLocalSaveCurrentAccount(),
     );

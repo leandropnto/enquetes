@@ -12,6 +12,7 @@ import '../protocols/protocols.dart';
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
+  final SaveCurrentAccount saveCurrentAccount;
 
   final _emailError = RxString();
   final _passwordError = RxString();
@@ -40,6 +41,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   GetxLoginPresenter({
     @required this.authentication,
     @required this.validation,
+    @required this.saveCurrentAccount,
   });
 
   void _validateForm() {
@@ -65,10 +67,9 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   Future<void> auth() async {
     _isLoading.value = true;
     try {
-      await authentication
+      final account = await authentication
           .auth(AuthenticationParams(email: _email, secret: _password));
-
-      _isLoading.value = false;
+      saveCurrentAccount.save(account);
       navigate = "/surveys";
     } on DomainError catch (e) {
       _mainError.value = e.description;

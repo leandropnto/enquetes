@@ -1,3 +1,5 @@
+import 'package:enquetes/ui/helpers/helpers.dart';
+
 enum UIError {
   unexpected,
   invalidCredentials,
@@ -9,13 +11,13 @@ extension UIErrorExt on UIError {
   String get description {
     switch (this) {
       case UIError.invalidCredentials:
-        return 'Credenciais Inválidas';
+        return R.strings.msgInvalidCredentials;
       case UIError.requiredField:
-        return 'Campo obrigatório';
+        return R.strings.msgRequiredField;
       case UIError.invalidField:
-        return 'Campo inválido';
+        return R.strings.msgInvalidField;
       default:
-        return 'Ops... Ocorreu um erro. Por favor, tente novamente';
+        return R.strings.msgUnexpectedError;
     }
   }
 }

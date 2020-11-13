@@ -248,7 +248,7 @@ void main() {
     mainErrorController.add(UIError.unexpected);
     await tester.pump();
 
-    expect(find.text("Ops... Ocorreu um erro. Por favor, tente novamente"),
+    expect(find.text("Ops... Ocorreu um erro. Por favor, tente novamente."),
         findsOneWidget);
   });
 

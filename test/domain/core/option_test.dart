@@ -41,7 +41,6 @@ void main() {
     final text = "any_string";
     final option = Some<String>(text);
     final mappedString = option.map<String>((value) => value.toUpperCase());
-    print(mappedString.value);
     expect(mappedString.value, text.toUpperCase());
   });
 
@@ -50,8 +49,6 @@ void main() {
     Option<String> option = None<String>();
     final mappedString =
         option.map((value) => value.toUpperCase(), orElse: () => text);
-
-    print(mappedString.value);
     expect(mappedString.value, text);
   });
 

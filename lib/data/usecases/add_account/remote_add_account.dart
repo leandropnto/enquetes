@@ -1,3 +1,4 @@
+import 'package:enquetes/domain/helpers/domain_error.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../domain/usecases/usecases.dart';
@@ -10,8 +11,12 @@ class RemoteAddAccount {
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
   Future<void> add(AddAccountParams params) async {
-    final body = RemoteAddAccountParams.fromDomain(params).toJson();
-    await httpClient.request(url: url, method: 'post', body: body);
+    try {
+      final body = RemoteAddAccountParams.fromDomain(params).toJson();
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 

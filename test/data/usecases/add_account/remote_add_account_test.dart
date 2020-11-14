@@ -1,5 +1,6 @@
 import 'package:enquetes/data/http/http.dart';
 import 'package:enquetes/data/usecases/usecases.dart';
+import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -54,5 +55,13 @@ void main() {
         body: RemoteAddAccountParams.fromDomain(params).toJson(),
       ),
     );
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    mockHttpError(HttpError.badRequest);
+
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }

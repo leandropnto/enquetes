@@ -1,60 +1,69 @@
 import 'package:equatable/equatable.dart';
 
 abstract class Option<T> extends Equatable {
-  T _value;
+  const Option._();
 
-  R fold<R>({R Function() ifNone, R Function(T value) ifSome}) {
-    return _value != null ? ifSome(_value) : ifNone();
-  }
-
-  R map<R>(Function(T value) block, {R Function() orElse}) {
-    return _value != null
-        ? block(_value)
-        : orElse != null
-            ? orElse()
-            : null;
-  }
-
-  Option<R> andThen<R>(R Function(T value) block) {
-    return _value != null ? Some(block(_value)) : None<R>();
-  }
-
-  Option<T> operator |(Function(T value) block) {
-    return Some(block(_value));
-  }
-
-  T get value;
-
-  Option._(this._value);
-
-  Option<T> some<T>(T value) => Some(value);
+  //Option<T> some<T>(T value) => value != null ? Some<T>(value) : None<T>();
 
   Option none() => None();
 
-  bool get isSome => _value != null;
-  bool get isNone => _value == null;
+  bool isSome() => value != null;
+
+  bool isNone() => !isSome();
+
+  R fold<R>({R ifNone(), R ifSome(T a)});
+
+  Option<R> map<R>(Function(T value) block, {R Function() orElse}) {
+    return isSome()
+        ? optionOf(block(value))
+        : orElse != null
+            ? some(orElse())
+            : none();
+  }
+
+  Option<T> operator |(Function(T value) block);
+
+  T get value;
 
   @override
-  List<Object> get props => [_value];
+  List<Object> get props => [value];
 }
 
-class Some<T> extends Option<T> {
-  T _value;
+class Some<A> extends Option<A> {
+  final A _value;
 
-  Some(this._value) : super._(_value);
+  const Some(this._value) : super._();
+
+  A get value =>
+      _value != null ? _value : throw Exception("Empty Option exception");
 
   @override
-  T get value =>
-      _value != null ? _value : throw Exception("Empty Option exception");
+  R fold<R>({R Function() ifNone, R Function(A a) ifSome}) =>
+      isSome() ? ifSome(_value) : none();
+
+  @override
+  Option<A> operator |(Function(A value) block) =>
+      isSome() ? optionOf(block(_value)) : none();
 }
 
 class None<T> extends Option<T> {
-  None() : super._(null);
+  const None._() : super._();
+
+  factory None() => const None._();
 
   @override
-  T get value => throw Exception("Empty Option exception");
+  R fold<R>({R Function() ifNone, R Function(T a) ifSome}) => ifNone();
+
+  @override
+  Option<T> operator |(Function(T value) block) => None();
+
+  @override
+  T get value => throw Exception("None instance!");
+
+  @override
+  bool isSome() => false;
 }
 
-extension OptionExt on String {
-  Option<String> some() => Some(this);
-}
+Option<A> none<A>() => new None();
+Option<A> some<A>(A a) => new Some(a);
+Option<A> optionOf<A>(A value) => value != null ? some(value) : none();

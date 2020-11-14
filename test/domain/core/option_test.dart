@@ -39,28 +39,28 @@ void main() {
 
   test('Should map value', () {
     final text = "any_string";
-    Option<String> option = Some(text);
+    final option = Some<String>(text);
     final mappedString = option.map<String>((value) => value.toUpperCase());
-
-    expect(mappedString, text.toUpperCase());
+    print(mappedString.value);
+    expect(mappedString.value, text.toUpperCase());
   });
 
   test('Should produce OrElse value if None', () {
     final text = "any_string";
-    Option<String> option = None();
+    Option<String> option = None<String>();
     final mappedString =
-        option.map<String>((value) => value.toUpperCase(), orElse: () => text);
+        option.map((value) => value.toUpperCase(), orElse: () => text);
 
-    expect(mappedString, text);
+    print(mappedString.value);
+    expect(mappedString.value, text);
   });
 
   test('Should cascade flatMap', () {
     final text = " any_string ";
     Option<String> option = Some(text);
 
-    final mappedString = option
-        .andThen((value) => value.trim())
-        .andThen((value) => value.toUpperCase());
+    final mappedString =
+        option.map((value) => value.trim()).map((value) => value.toUpperCase());
 
     expect(mappedString.value, text.trim().toUpperCase());
   });
@@ -71,9 +71,9 @@ void main() {
     Option<String> option = Some(text);
 
     final mappedString = option
-        .andThen((value) => value.trim())
-        .andThen<String>((value) => null)
-        .andThen((value) {
+        .map((value) => value.trim())
+        .map<String>((value) => null)
+        .map((value) {
       originalText = text.toUpperCase();
     });
 
@@ -89,5 +89,12 @@ void main() {
 
     final result = option | toUpper | trimmed;
     expect(result.value, text.toUpperCase().trim());
+  });
+
+  test(
+      'Should create a none Instance if constructor Some is called '
+      'if a null value', () {
+    final opt = optionOf(null);
+    expect(opt, isA<None>());
   });
 }

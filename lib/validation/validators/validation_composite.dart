@@ -15,7 +15,7 @@ class ValidationComposite implements Validation {
         .where((validation) => validation.field == field)
         .map((validation) => validation.validate(value))
         .firstWhere(
-          (element) => element.isSome,
+          (element) => element.isSome(),
           orElse: () => None<ValidationError>(),
         );
   }

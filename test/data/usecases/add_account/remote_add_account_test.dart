@@ -14,6 +14,7 @@ void main() {
   String url;
   AddAccountParams params;
   String password;
+  Map httpResponse;
 
   PostExpectation mockRequest() => when(
         httpClient.request(
@@ -43,6 +44,9 @@ void main() {
         email: faker.internet.email(),
         password: password,
         passwordConfirmation: password);
+
+    httpResponse = mockValidData();
+    mockHttpData(httpResponse);
   });
 
   test('Should call HttpClient with correct values', () async {
@@ -54,7 +58,7 @@ void main() {
         method: 'post',
         body: RemoteAddAccountParams.fromDomain(params).toJson(),
       ),
-    );
+    ).called(1);
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400', () async {
@@ -79,5 +83,11 @@ void main() {
     final future = sut.add(params);
 
     expect(future, throwsA(DomainError.emailInUse));
+  });
+
+  test('Should return an Account if HttpClient returns 200 ', () async {
+    final account = await sut.add(params);
+
+    expect(account.token, httpResponse['accessToken']);
   });
 }

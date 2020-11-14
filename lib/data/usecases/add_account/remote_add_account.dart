@@ -1,19 +1,23 @@
-import 'package:enquetes/domain/helpers/domain_error.dart';
+import 'package:enquetes/data/models/models.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../domain/entities/entities.dart';
+import '../../../domain/helpers/domain_error.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 
-class RemoteAddAccount {
+class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
   final String url;
 
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
-  Future<void> add(AddAccountParams params) async {
+  Future<AccountEntity> add(AddAccountParams params) async {
     try {
       final body = RemoteAddAccountParams.fromDomain(params).toJson();
-      await httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse =
+          await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
       if (error == HttpError.forbidden) {
         throw DomainError.emailInUse;

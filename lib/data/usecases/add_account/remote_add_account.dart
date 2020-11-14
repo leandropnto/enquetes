@@ -14,7 +14,11 @@ class RemoteAddAccount {
     try {
       final body = RemoteAddAccountParams.fromDomain(params).toJson();
       await httpClient.request(url: url, method: 'post', body: body);
-    } on HttpError {
+    } on HttpError catch (error) {
+      if (error == HttpError.forbidden) {
+        throw DomainError.emailInUse;
+      }
+
       throw DomainError.unexpected;
     }
   }

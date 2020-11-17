@@ -15,6 +15,7 @@ dependencies:
   equatable:
   get:
   flutter_secure_storage:
+  velocity_x: ^1.0.0
 
 
   cupertino_icons: ^0.1.3

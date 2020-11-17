@@ -6,6 +6,7 @@ abstract class SignUpPresenter {
   Stream<UIError> get emailErrorStream;
 
   Stream<UIError> get passwordErrorStream;
+
   Stream<UIError> get passwordConfirmationErrorStream;
 
   Stream<UIError> get mainErrorStream;
@@ -19,6 +20,10 @@ abstract class SignUpPresenter {
   void validateEmail(String email);
 
   void validatePassword(String password);
+
+  void validatePasswordConfirmation(String password);
+
+  void validateName(String name);
 
   Future<void> auth();
 

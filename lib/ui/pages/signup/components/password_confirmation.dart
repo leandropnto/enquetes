@@ -23,7 +23,7 @@ class PasswordConfirmationInput extends StatelessWidget {
               errorText: snapshot.hasData ? snapshot.data.description : null,
             ),
             obscureText: true,
-            // onChanged: presenter.validatePassword,
+            onChanged: presenter.validatePasswordConfirmation,
           );
         },
       ),

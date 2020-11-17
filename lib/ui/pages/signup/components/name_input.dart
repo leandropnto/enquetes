@@ -20,7 +20,7 @@ class NameInput extends StatelessWidget {
             ),
             errorText: snapshot.hasData ? snapshot.data.description : null,
           ),
-          onChanged: presenter.validateEmail,
+          onChanged: presenter.validateName,
           keyboardType: TextInputType.name,
         );
       },

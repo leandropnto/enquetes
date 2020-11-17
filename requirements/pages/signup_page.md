@@ -8,8 +8,8 @@
 5. ✅Mostrar mensagem de erro se o email for inválido
 6. ✅Remover mensagem de erro se o email for válido
 7. ✅ Validar senha quando o usuário digitar no campo
-8. Mostrar mensagem de erro se a senha for inválida
-9. Remover mensagem de erro se a senha for válida
+8. ✅ Mostrar mensagem de erro se a senha for inválida
+9. ✅ Remover mensagem de erro se a senha for válida
 10. ✅ Validar nome quando o usuário digitar no campo
 11. ✅Mostrar mensagem de erro se o nome for inválido
 12. ✅Remover mensagem de erro se o nome for válido
@@ -22,4 +22,4 @@
 19. Chamar o método de criar conta
 20. Exibir mensagem de erro caso a criação de conta falhe
 21. Esconder loading no fim da ação de criar conta
-22. Chamar o método de Login ao clicar no link
+22. ✅ Chamar o método de Login ao clicar no link

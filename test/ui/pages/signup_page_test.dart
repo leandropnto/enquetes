@@ -15,6 +15,7 @@ void main() {
   StreamController<UIError> nameErrorController;
   StreamController<UIError> emailErrorController;
   StreamController<UIError> passwordErrorController;
+  StreamController<UIError> passwordConfirmationErrorController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
   StreamController<UIError> mainErrorController;
@@ -24,6 +25,7 @@ void main() {
     nameErrorController = StreamController<UIError>();
     emailErrorController = StreamController<UIError>();
     passwordErrorController = StreamController<UIError>();
+    passwordConfirmationErrorController = StreamController<UIError>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
     mainErrorController = StreamController<UIError>();
@@ -31,11 +33,17 @@ void main() {
   }
 
   void mockStreams() {
+    when(presenter.nameErrorStream)
+        .thenAnswer((realInvocation) => nameErrorController.stream);
+
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
 
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
+
+    when(presenter.passwordConfirmationErrorStream)
+        .thenAnswer((_) => passwordConfirmationErrorController.stream);
 
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
@@ -48,18 +56,17 @@ void main() {
 
     when(presenter.navigateStream)
         .thenAnswer((_) => navigationController.stream);
-    when(presenter.nameErrorStream)
-        .thenAnswer((realInvocation) => nameErrorController.stream);
   }
 
   void closeStreams() {
+    nameErrorController.close();
     emailErrorController.close();
     passwordErrorController.close();
+    passwordConfirmationErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
     navigationController.close();
-    nameErrorController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -148,7 +155,7 @@ void main() {
     verify(presenter.validatePasswordConfirmation(password));
   });
 
-  group('email', () {
+  group('Email', () {
     testWidgets('Should present error  ', (WidgetTester tester) async {
       await loadPage(tester);
 
@@ -172,7 +179,7 @@ void main() {
     });
   });
 
-  group('name', () {
+  group('Name', () {
     testWidgets('Should present name error ', (WidgetTester tester) async {
       await loadPage(tester);
 
@@ -192,6 +199,56 @@ void main() {
       expect(
           find.descendant(
               of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)),
+          findsOneWidget);
+    });
+  });
+
+  group('Password', () {
+    testWidgets('Should present Password error ', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      passwordErrorController.add(UIError.invalidField);
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+
+      passwordErrorController.add(UIError.requiredField);
+      await tester.pump();
+
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+
+      passwordErrorController.add(null);
+      await tester.pump();
+
+      expect(
+          find.descendant(
+              of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+          findsOneWidget);
+    });
+  });
+
+  group('Password confirmation', () {
+    testWidgets('Should present Password confirmation error ',
+        (WidgetTester tester) async {
+      await loadPage(tester);
+
+      passwordConfirmationErrorController.add(UIError.invalidField);
+      await tester.pump();
+
+      expect(find.text('Campo inválido'), findsOneWidget);
+
+      passwordConfirmationErrorController.add(UIError.requiredField);
+      await tester.pump();
+
+      expect(find.text('Campo obrigatório'), findsOneWidget);
+
+      passwordConfirmationErrorController.add(null);
+      await tester.pump();
+
+      expect(
+          find.descendant(
+              of: find.bySemanticsLabel('Confirmar senha'),
+              matching: find.byType(Text)),
           findsOneWidget);
     });
   });

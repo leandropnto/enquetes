@@ -1,13 +1,21 @@
 abstract class Either<L, R> {
   const Either._();
+
   dynamic get value;
 
   B fold<B>(B ifLeft(L l), B ifRight(R r));
 
   Either<L2, R> mapLeft<L2>(L2 f(L l)) => fold((L l) => left(f(l)), right);
+
   Either<L, R2> mapRight<R2>(R2 f(R r)) => fold(left, (R r) => right(f(r)));
+
   bool isLeft() => this is Left;
+
   bool isRight() => this is Right;
+
+  Either<L, R2> map<R2>(R2 f(R r)) => fold(left, (R r) => right(f(r)));
+
+  Either<L, R> operator |(Function(R val) block) => block(value);
 }
 
 class Left<L, R> extends Either<L, R> {
@@ -33,4 +41,5 @@ class Right<L, R> extends Either<L, R> {
 }
 
 Either<L, R> left<L, R>(L l) => Left._(l);
+
 Either<L, R> right<L, R>(R r) => Right._(r);

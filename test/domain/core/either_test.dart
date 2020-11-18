@@ -67,4 +67,27 @@ void main() {
     final sut = right(value);
     expect(sut.isRight(), isTrue);
   });
+
+  test('Should map value', () {
+    final value = " any_value ";
+    final sut = right(value).map((r) => r.toUpperCase()).map((r) => r.trim());
+    expect(sut.value, value.toUpperCase().trim());
+  });
+
+  test('Should map value with pipe operator', () {
+    final value = " any_value ";
+    final sut = right(value) |
+        (value) => right(value.toUpperCase()) | (value) => right(value.trim());
+    expect(sut.value, value.toUpperCase().trim());
+  });
+
+  test('Should return left instance when map value returns left', () {
+    final value = " any_value ";
+    final sut = right<String, String>(value) |
+        (value) =>
+            right(value.toUpperCase()) |
+            (value) => left<String, String>("Some Error");
+    expect(sut.isLeft(), isTrue);
+    expect(sut.value, "Some Error");
+  });
 }

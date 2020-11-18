@@ -6,6 +6,8 @@ abstract class Either<L, R> {
 
   Either<L2, R> mapLeft<L2>(L2 f(L l)) => fold((L l) => left(f(l)), right);
   Either<L, R2> mapRight<R2>(R2 f(R r)) => fold(left, (R r) => right(f(r)));
+  bool isLeft() => this is Left;
+  bool isRight() => this is Right;
 }
 
 class Left<L, R> extends Either<L, R> {

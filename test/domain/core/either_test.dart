@@ -55,4 +55,16 @@ void main() {
     final sut = left(value).fold((l) => l.toUpperCase(), (r) => r);
     expect(sut, value.toUpperCase());
   });
+
+  test('Should validate left Instance', () {
+    final value = "any_value";
+    final sut = left(value);
+    expect(sut.isLeft(), isTrue);
+  });
+
+  test('Should validate right Instance', () {
+    final value = "any_value";
+    final sut = right(value);
+    expect(sut.isRight(), isTrue);
+  });
 }

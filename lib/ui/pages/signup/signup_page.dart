@@ -28,7 +28,7 @@ class _SignupPageState extends State<SignupPage> {
       builder: (context) {
         widget.presenter.isLoadingStream.listen((isLoading) {
           if (isLoading) {
-            showLoading(context, message: "Efetuando login...");
+            showLoading(context, message: "Criando a conta...");
           } else {
             hideLoading(context);
           }

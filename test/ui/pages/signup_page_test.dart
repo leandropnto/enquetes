@@ -290,6 +290,28 @@ void main() {
     });
   });
 
+  group('Loading', () {
+    testWidgets('Should show loading on auth', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isLoadingController.add(true);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets('Should hide loading on auth', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      isLoadingController.add(true);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      isLoadingController.add(false);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    });
+  });
+
   tearDown(() {
     closeStreams();
   });

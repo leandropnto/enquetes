@@ -312,6 +312,29 @@ void main() {
     });
   });
 
+  group("Error Message", () {
+    testWidgets('Should present error message if signUp fails',
+        (WidgetTester tester) async {
+      await loadPage(tester);
+
+      mainErrorController.add(UIError.emailInUse);
+      await tester.pump();
+
+      expect(find.text("O email já está em uso."), findsOneWidget);
+    });
+
+    testWidgets('Should present error message if signUp fails',
+        (WidgetTester tester) async {
+      await loadPage(tester);
+
+      mainErrorController.add(UIError.unexpected);
+      await tester.pump();
+
+      expect(find.text("Ops... Ocorreu um erro. Por favor, tente novamente."),
+          findsOneWidget);
+    });
+  });
+
   tearDown(() {
     closeStreams();
   });

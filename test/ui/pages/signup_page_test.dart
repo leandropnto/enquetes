@@ -80,10 +80,17 @@ void main() {
       initialRoute: "/signup",
       getPages: [
         GetPage(
-            name: "/signup",
-            page: () => SignupPage(
-                  presenter: presenter,
-                )),
+          name: "/signup",
+          page: () => SignupPage(
+            presenter: presenter,
+          ),
+        ),
+        GetPage(
+          name: "/any_route",
+          page: () => Scaffold(
+            body: Text('fake page'),
+          ),
+        ),
       ],
     );
     await tester.pumpWidget(signUpPage);
@@ -332,6 +339,29 @@ void main() {
 
       expect(find.text("Ops... Ocorreu um erro. Por favor, tente novamente."),
           findsOneWidget);
+    });
+  });
+
+  group('Page', () {
+    testWidgets('Should change page', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      navigationController.add('/any_route');
+      await tester.pumpAndSettle();
+      expect(Get.currentRoute, '/any_route');
+      expect(find.text('fake page'), findsOneWidget);
+    });
+
+    testWidgets('Should not change page', (WidgetTester tester) async {
+      await loadPage(tester);
+
+      navigationController.add('');
+      await tester.pump();
+      expect(Get.currentRoute, '/signup');
+
+      navigationController.add('');
+      await tester.pump();
+      expect(Get.currentRoute, '/signup');
     });
   });
 

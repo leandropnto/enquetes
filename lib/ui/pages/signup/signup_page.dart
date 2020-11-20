@@ -34,7 +34,8 @@ class _SignupPageState extends State<SignupPage> {
           }
         });
 
-        widget.presenter.navigateStream.listen((page) => Get.offAllNamed(page));
+        widget.presenter.navigateStream.listen(
+            (page) => page?.isNotEmpty == true ? Get.offAllNamed(page) : {});
         widget.presenter.mainErrorStream.listen((error) {
           if (error != null) {
             showErrorMessage(context, error.description);

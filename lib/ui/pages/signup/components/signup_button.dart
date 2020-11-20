@@ -11,7 +11,7 @@ class SignupButton extends StatelessWidget {
       stream: presenter.isFormValidStream,
       builder: (context, snapshot) {
         return RaisedButton(
-          onPressed: snapshot.data == true ? presenter.auth : null,
+          onPressed: snapshot.data == true ? presenter.signUp : null,
           child: Text(R.strings.addAccount.toUpperCase()),
         );
       },

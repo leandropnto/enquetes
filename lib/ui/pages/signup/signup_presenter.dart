@@ -25,7 +25,7 @@ abstract class SignUpPresenter {
 
   void validateName(String name);
 
-  Future<void> auth();
+  Future<void> signUp();
 
   void dispose();
 }

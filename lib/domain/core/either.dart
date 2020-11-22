@@ -1,45 +1,90 @@
 abstract class Either<L, R> {
   const Either._();
 
-  dynamic get value;
+  const factory Either.left(L value) = _Left<L, R>._;
 
-  B fold<B>(B ifLeft(L l), B ifRight(R r));
+  const factory Either.right(R value) = _Right<L, R>._;
 
-  Either<L2, R> mapLeft<L2>(L2 f(L l)) => fold((L l) => left(f(l)), right);
+  bool isLeft() => this is _Left;
 
-  Either<L, R2> mapRight<R2>(R2 f(R r)) => fold(left, (R r) => right(f(r)));
+  bool isRight() => this is _Right;
 
-  bool isLeft() => this is Left;
+  R get value;
 
-  bool isRight() => this is Right;
+  T fold<T>(T Function(L) onLeft, T Function(R) onRight);
 
-  Either<L, R2> map<R2>(R2 f(R r)) => fold(left, (R r) => right(f(r)));
+  Either<L, T> map<T>(T Function(R) f);
 
-  Either<L, R> operator |(Function(R val) block) => block(value);
+  Either<L, T> flatMap<T>(Either<L, T> Function(R) f);
+
+  Either<L1, R> mapLeft<L1>(L1 Function(L) f) => fold(
+        (l) => Either.left(f(l)),
+        (r) => Either.right(r),
+      );
+
+  Either<L, R> operator |(Function(R val) block) => this is _Left<L, R> ? this : flatMap((r) => block(value));
 }
 
-class Left<L, R> extends Either<L, R> {
+class _Left<L, R> extends Either<L, R> {
+  const _Left._(this._value) : super._();
+
   final L _value;
 
-  Left._(this._value) : super._();
-
-  L get value => _value;
+  @override
+  T fold<T>(T Function(L) onLeft, T Function(R) onRight) => onLeft(_value);
 
   @override
-  B fold<B>(B Function(L l) ifLeft, B Function(R r) ifRight) => ifLeft(_value);
+  Either<L, T> map<T>(T Function(R) f) => _Left._(_value);
+
+  @override
+  Either<L, T> flatMap<T>(Either<L, T> Function(R) f) => _Left._(_value);
+
+  @override
+  int get hashCode => _value.hashCode;
+
+  @override
+  bool operator ==(other) => other is _Left<L, R> && other._value == _value;
+
+  @override
+  String toString() => 'Left($_value)';
+
+  @override
+  R get value => throw StateError('left called on right value');
 }
 
-class Right<L, R> extends Either<L, R> {
+class _Right<L, R> extends Either<L, R> {
+  const _Right._(this._value) : super._();
+
   final R _value;
 
-  const Right._(this._value) : super._();
-
-  R get value => _value;
+  @override
+  T fold<T>(T Function(L) onLeft, T Function(R) onRight) => onRight(_value);
 
   @override
-  B fold<B>(B Function(L l) ifLeft, B Function(R r) ifRight) => ifRight(_value);
+  Either<L, T> map<T>(T Function(R) f) => _Right._(f(_value));
+
+  @override
+  Either<L, T> flatMap<T>(Either<L, T> Function(R) f) => f(_value);
+
+  @override
+  int get hashCode => _value.hashCode;
+
+  @override
+  bool operator ==(other) => other is _Right<L, R> && other._value == _value;
+
+  @override
+  String toString() => 'Right($_value)';
+
+  @override
+  R get value => _value;
 }
 
-Either<L, R> left<L, R>(L l) => Left._(l);
+extension EitherExt<T> on T {
+  Either<L, R> left<L, R>() {
+    return Either<L, R>.left(this as L);
+  }
 
-Either<L, R> right<L, R>(R r) => Right._(r);
+  Either<L, R> right<L, R>() {
+    return Either<L, R>.right(this as R);
+  }
+}

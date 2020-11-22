@@ -3,13 +3,11 @@ import 'package:equatable/equatable.dart';
 abstract class Option<T> extends Equatable {
   const Option._();
 
-  //Option<T> some<T>(T value) => value != null ? Some<T>(value) : None<T>();
-
   Option none() => None();
 
-  bool isSome() => value != null;
+  bool isSome();
 
-  bool isNone() => !isSome();
+  bool isNone();
 
   R fold<R>({R ifNone(), R ifSome(T a)});
 
@@ -34,16 +32,19 @@ class Some<A> extends Option<A> {
 
   const Some(this._value) : super._();
 
-  A get value =>
-      _value != null ? _value : throw Exception("Empty Option exception");
+  A get value => _value != null ? _value : throw Exception("Empty Option exception");
 
   @override
-  R fold<R>({R Function() ifNone, R Function(A a) ifSome}) =>
-      isSome() ? ifSome(_value) : none();
+  R fold<R>({R Function() ifNone, R Function(A a) ifSome}) => ifSome(_value);
 
   @override
-  Option<A> operator |(Function(A value) block) =>
-      isSome() ? optionOf(block(_value)) : none();
+  Option<A> operator |(Function(A value) block) => optionOf(block(_value));
+
+  @override
+  bool isNone() => false;
+
+  @override
+  bool isSome() => true;
 }
 
 class None<T> extends Option<T> {
@@ -62,8 +63,13 @@ class None<T> extends Option<T> {
 
   @override
   bool isSome() => false;
+
+  @override
+  bool isNone() => true;
 }
 
 Option<A> none<A>() => new None();
+
 Option<A> some<A>(A a) => new Some(a);
+
 Option<A> optionOf<A>(A value) => value != null ? some(value) : none();

@@ -12,6 +12,7 @@ void main() {
   Validation validation;
   GetxSignUpPresenter sut;
   String email;
+  String name;
 
   PostExpectation mockValidationCall(String field) =>
       when(validation.validate(field: field == null ? anyNamed('field') : field, value: anyNamed('value')));
@@ -27,6 +28,7 @@ void main() {
       validation: validation,
     );
     email = faker.internet.email();
+    name = faker.person.name();
     mockValidation(value: None<ValidationError>());
   });
 
@@ -55,6 +57,34 @@ void main() {
 
       sut.validateEmail(email);
       sut.validateEmail(email);
+    });
+  });
+
+  group('Name', () {
+    test('Should call Validation with correct name', () {
+      sut.validateName(name);
+
+      verify(validation.validate(field: 'name', value: name)).called(1);
+    });
+
+    test('Should emit name error if validation fails', () {
+      mockValidation(value: Some(ValidationError.invalidField));
+
+      sut.nameErrorStream.listen(expectAsync1((error) => expect(error, UIError.invalidField)));
+
+      sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+      sut.validateName(name);
+      sut.validateName(name);
+    });
+
+    test('Should emit name null if validation succeeds', () {
+      sut.nameErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+      sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+      sut.validateName(name);
+      sut.validateName(name);
     });
   });
 }

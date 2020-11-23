@@ -11,10 +11,12 @@ class GetxSignUpPresenter extends GetxController {
   final Validation validation;
 
   final _emailError = Rx<UIError>();
+  final _nameError = Rx<UIError>();
 
   final _isFormValid = false.obs;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
+  Stream<UIError> get nameErrorStream => _nameError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
@@ -48,7 +50,12 @@ class GetxSignUpPresenter extends GetxController {
     _validateForm();
   }
 
+  void validateName(String name) {
+    _nameError.value = _validateField(field: 'name', value: name);
+    _validateForm();
+  }
+
   void dispose() {
-    debugPrint("disponse GetxSignUpPresenter");
+    debugPrint("dispose GetxSignUpPresenter");
   }
 }

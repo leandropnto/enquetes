@@ -16,8 +16,7 @@ dependencies:
   get:
   flutter_secure_storage:
   velocity_x: ^1.0.0
-
-
+  uuid:
   cupertino_icons: ^0.1.3
 
 dev_dependencies:

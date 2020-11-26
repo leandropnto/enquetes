@@ -1,10 +1,11 @@
 import 'package:enquetes/data/models/models.dart';
+import 'package:enquetes/domain/core/core.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../domain/entities/entities.dart';
-import '../../../domain/helpers/domain_error.dart';
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
+import 'remote_add_account_params.dart';
 
 class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
@@ -12,47 +13,17 @@ class RemoteAddAccount implements AddAccount {
 
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
-  Future<AccountEntity> add(AddAccountParams params) async {
+  Future<Either<AddAccountFailures, AccountEntity>> add(AddAccountParams params) async {
     try {
       final body = RemoteAddAccountParams.fromDomain(params).toJson();
-      final httpResponse =
-          await httpClient.request(url: url, method: 'post', body: body);
-      return RemoteAccountModel.fromJson(httpResponse).toEntity();
+      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity().right();
     } on HttpError catch (error) {
       if (error == HttpError.forbidden) {
-        throw DomainError.emailInUse;
+        return AddAccountFailures.emailInUse(params.email).left();
       }
 
-      throw DomainError.unexpected;
+      return AddAccountFailures.unexpectedError(Exception("$error")).left();
     }
   }
-}
-
-class RemoteAddAccountParams {
-  final String name;
-  final String email;
-  final String password;
-  final String passwordConfirmation;
-
-  RemoteAddAccountParams({
-    @required this.name,
-    @required this.email,
-    @required this.password,
-    @required this.passwordConfirmation,
-  });
-
-  factory RemoteAddAccountParams.fromDomain(AddAccountParams entity) =>
-      RemoteAddAccountParams(
-        name: entity.name,
-        email: entity.email,
-        password: entity.password,
-        passwordConfirmation: entity.passwordConfirmation,
-      );
-
-  Map toJson() => {
-        'name': name,
-        'email': email,
-        'password': password,
-        'passwordConfirmation': passwordConfirmation
-      };
 }

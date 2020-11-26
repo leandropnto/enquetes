@@ -1,6 +1,8 @@
 import 'package:enquetes/data/http/http.dart';
+import 'package:enquetes/data/usecases/add_account/remote_add_account_params.dart';
 import 'package:enquetes/data/usecases/usecases.dart';
-import 'package:enquetes/domain/helpers/helpers.dart';
+import 'package:enquetes/domain/core/core.dart';
+import 'package:enquetes/domain/entities/entities.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,10 +19,7 @@ void main() {
   Map httpResponse;
 
   PostExpectation mockRequest() => when(
-        httpClient.request(
-            url: anyNamed('url'),
-            method: anyNamed('method'),
-            body: anyNamed('body')),
+        httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')),
       );
 
   void mockHttpData(Map data) {
@@ -31,8 +30,7 @@ void main() {
     mockRequest().thenThrow(error);
   }
 
-  Map mockValidData() =>
-      {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
+  Map mockValidData() => {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
 
   setUp(() {
     password = faker.internet.password();
@@ -40,10 +38,7 @@ void main() {
     url = faker.internet.httpsUrl();
     sut = RemoteAddAccount(httpClient: httpClient, url: url);
     params = AddAccountParams(
-        name: faker.person.name(),
-        email: faker.internet.email(),
-        password: password,
-        passwordConfirmation: password);
+        name: faker.person.name(), email: faker.internet.email(), password: password, passwordConfirmation: password);
 
     httpResponse = mockValidData();
     mockHttpData(httpResponse);
@@ -64,38 +59,38 @@ void main() {
   test('Should throw UnexpectedError if HttpClient returns 400', () async {
     mockHttpError(HttpError.badRequest);
 
-    final future = sut.add(params);
+    final future = await sut.add(params);
 
-    expect(future, throwsA(DomainError.unexpected));
+    expect(future, isA<Either<AddAccountFailures, AccountEntity>>());
   });
 
   test('Should throw UnexpectedError if HttpClient returns 500', () async {
     mockHttpError(HttpError.serverError);
 
-    final future = sut.add(params);
+    final future = await sut.add(params);
 
-    expect(future, throwsA(DomainError.unexpected));
+    expect(future, isA<Either<AddAccountFailures, AccountEntity>>());
   });
 
   test('Should throw InvalidCredentials if HttpClient returns 403', () async {
     mockHttpError(HttpError.forbidden);
 
-    final future = sut.add(params);
+    final future = await sut.add(params);
 
-    expect(future, throwsA(DomainError.emailInUse));
+    expect(future, isA<Either<AddAccountFailures, AccountEntity>>());
   });
 
   test('Should return an Account if HttpClient returns 200 ', () async {
     final account = await sut.add(params);
 
-    expect(account.token.getOrCrash(), httpResponse['accessToken']);
+    account.fold(
+        (l) => throw Exception("Error get token"), (r) => expect(r.token.getOrCrash(), httpResponse['accessToken']));
   });
 
-  test('Should throw unexpectedError if HttpClient return 200 if invalid data ',
-      () async {
+  test('Should throw unexpectedError if HttpClient return 200 if invalid data ', () async {
     mockHttpData({'invalid_key': 'invalid_value'});
-    final future = sut.add(params);
+    final future = await sut.add(params);
 
-    expect(future, throwsA(DomainError.unexpected));
+    expect(future, isA<Either<AddAccountFailures, AccountEntity>>());
   });
 }

@@ -23,16 +23,16 @@ class AuthenticationFailures {
 
   factory AuthenticationFailures.invalidCredentials(AuthenticationParams params) = InvalidCredentials;
 
-  factory AuthenticationFailures.unexpectedError(Exception exception) = UnexpectedError;
+  factory AuthenticationFailures.unexpectedError(Exception exception) = AuthenticationUnexpectedError;
 
   R when<R>(
     R Function(AuthenticationFailures) invalidCredentials,
-    R Function(UnexpectedError) unexpectedError,
+    R Function(AuthenticationUnexpectedError) unexpectedError,
     R Function() orElse,
   ) {
     if (this is InvalidCredentials) {
       return invalidCredentials(this);
-    } else if (this is UnexpectedError) {
+    } else if (this is AuthenticationUnexpectedError) {
       return unexpectedError(this);
     } else {
       return orElse();
@@ -46,8 +46,8 @@ class InvalidCredentials extends AuthenticationFailures {
   InvalidCredentials(this.params) : super._();
 }
 
-class UnexpectedError extends AuthenticationFailures {
+class AuthenticationUnexpectedError extends AuthenticationFailures {
   final Exception exception;
 
-  UnexpectedError(this.exception) : super._();
+  AuthenticationUnexpectedError(this.exception) : super._();
 }

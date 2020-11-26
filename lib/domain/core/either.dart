@@ -11,7 +11,7 @@ abstract class Either<L, R> {
 
   R get value;
 
-  T fold<T>(T Function(L) onLeft, T Function(R) onRight);
+  T fold<T>(T Function(L l) onLeft, T Function(R r) onRight);
 
   Either<L, T> map<T>(T Function(R) f);
 

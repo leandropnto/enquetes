@@ -110,7 +110,9 @@ class GetxSignUpPresenter extends GetxController {
         password: _password,
         passwordConfirmation: _passwordConfirmation,
       ));
-      await saveCurrentAccount.save(account);
+      account.mapLeft((l) {
+        _mainError.value = UIError.unexpected;
+      }).map((r) async => await saveCurrentAccount.save(r));
     } on DomainError {
       _mainError.value = UIError.unexpected;
     }

@@ -1,6 +1,6 @@
 import 'package:enquetes/data/models/models.dart';
+import 'package:enquetes/domain/core/core.dart';
 import 'package:enquetes/domain/entities/account/account_entity.dart';
-import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../domain/usecases/usecases.dart';
@@ -12,16 +12,15 @@ class RemoteAuthentication implements Authentication {
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<AccountEntity> auth(AuthenticationParams params) async {
+  Future<Either<AuthenticationFailures, AccountEntity>> auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
-      final httpResponse =
-          await httpClient.request(url: url, method: 'post', body: body);
-      return RemoteAccountModel.fromJson(httpResponse).toEntity();
+      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity().right();
     } on HttpError catch (error) {
-      throw error == HttpError.unauthorized
-          ? DomainError.invalidCredentials
-          : DomainError.unexpected;
+      return error == HttpError.unauthorized
+          ? AuthenticationFailures.invalidCredentials(params).left() //DomainError.invalidCredentials
+          : AuthenticationFailures.unexpectedError(Exception("$error")).left(); //DomainError.unexpected;
     }
   }
 }

@@ -88,7 +88,7 @@ void main() {
   test('Should return an Account if HttpClient returns 200 ', () async {
     final account = await sut.add(params);
 
-    expect(account.token, httpResponse['accessToken']);
+    expect(account.token.getOrCrash(), httpResponse['accessToken']);
   });
 
   test('Should throw unexpectedError if HttpClient return 200 if invalid data ',

@@ -24,7 +24,7 @@ void main() {
   setUp(() {
     loadCurrentAccount = LoadCurrentAccountSpy();
     sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
-    mockLoadAccount(AccountEntity(faker.guid.guid()));
+    mockLoadAccount(AccountEntity(Token.of(faker.guid.guid())));
   });
 
   test('Should call loadCurrent account', () async {

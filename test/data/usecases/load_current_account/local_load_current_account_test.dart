@@ -42,7 +42,7 @@ void main() {
 
   test('Should return an AccountEntity', () async {
     final account = await sut.load();
-    expect(account, AccountEntity(token));
+    expect(account, AccountEntity(Token.of(token)));
   });
 
   test('Should throw UnexpectedError if fetchSecureCacheStorage throws',

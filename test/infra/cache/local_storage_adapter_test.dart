@@ -1,3 +1,4 @@
+import 'package:enquetes/domain/core/core.dart';
 import 'package:enquetes/infra/cache/cache.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -43,10 +44,10 @@ void main() {
       verify(secureStorage.write(key: key, value: value)).called(1);
     });
 
-    test('Should throw is Save Secure throws', () async {
+    test('Should return left instance of ValueFailure', () async {
       mockSaveSecureWriteError();
-      final future = sut.saveSecure(key: key, value: value);
-      expect(future, throwsA(TypeMatcher<Exception>()));
+      final result = await sut.saveSecure(key: key, value: value);
+      expect(result, isA<Either<ValueFailure, Unit>>());
     });
   });
 

@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
+import 'account.dart';
+
 class AccountEntity extends Equatable {
-  final String token;
+  final Token token;
 
   AccountEntity(this.token);
 

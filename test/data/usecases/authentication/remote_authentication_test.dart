@@ -95,7 +95,7 @@ void main() {
 
     final account = await sut.auth(params);
 
-    expect(account.token, validaData['accessToken']);
+    expect(account.token.getOrCrash(), validaData['accessToken']);
   });
 
   test(

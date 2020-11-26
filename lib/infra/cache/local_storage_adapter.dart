@@ -1,3 +1,6 @@
+import 'package:enquetes/domain/core/either.dart';
+import 'package:enquetes/domain/core/unit.dart';
+import 'package:enquetes/domain/core/value_failure.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 
@@ -10,9 +13,14 @@ class LocalStorageAdapter
   LocalStorageAdapter({@required this.secureStorage});
 
   @override
-  Future<void> saveSecure(
+  Future<Either<ValueFailure, Unit>> saveSecure(
       {@required String key, @required String value}) async {
-    await secureStorage.write(key: key, value: value);
+    try {
+      await secureStorage.write(key: key, value: value);
+      return unit.right();
+    } catch (e) {
+      return ValueFailure.unexpectedError(e).left();
+    }
   }
 
   @override

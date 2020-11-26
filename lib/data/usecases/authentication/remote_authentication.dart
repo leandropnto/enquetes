@@ -1,5 +1,5 @@
 import 'package:enquetes/data/models/models.dart';
-import 'package:enquetes/domain/entities/account_entity.dart';
+import 'package:enquetes/domain/entities/account/account_entity.dart';
 import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
 

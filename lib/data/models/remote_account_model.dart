@@ -11,5 +11,5 @@ class RemoteAccountModel {
           ? RemoteAccountModel(json['accessToken'])
           : throw HttpError.invalidData;
 
-  AccountEntity toEntity() => AccountEntity(accessToken);
+  AccountEntity toEntity() => AccountEntity(Token.of(accessToken));
 }

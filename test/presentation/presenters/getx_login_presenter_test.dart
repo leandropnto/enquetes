@@ -1,5 +1,6 @@
 import 'package:enquetes/domain/core/option.dart';
-import 'package:enquetes/domain/entities/account_entity.dart';
+import 'package:enquetes/domain/entities/account/account_entity.dart';
+import 'package:enquetes/domain/entities/entities.dart';
 import 'package:enquetes/domain/helpers/domain_error.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/presentation/presenters/presenters.dart';
@@ -35,7 +36,7 @@ void main() {
 
   void mockAuthentication() {
     mockAuthenticationCall()
-        .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+        .thenAnswer((_) async => AccountEntity(Token.of(faker.guid.guid())));
   }
 
   void mockAuthenticationError(DomainError error) {

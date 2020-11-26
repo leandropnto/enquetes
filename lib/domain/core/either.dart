@@ -23,6 +23,8 @@ abstract class Either<L, R> {
       );
 
   Either<L, R> operator |(Function(R val) block) => this is _Left<L, R> ? this : flatMap((r) => block(value));
+
+  Either<L2, R2> bimap<L2, R2>(L2 Function(L) ifLeft, R2 Function(R) ifRight);
 }
 
 class _Left<L, R> extends Either<L, R> {
@@ -50,6 +52,9 @@ class _Left<L, R> extends Either<L, R> {
 
   @override
   R get value => throw StateError('left called on right value');
+
+  @override
+  Either<L2, R2> bimap<L2, R2>(L2 Function(L p1) ifLeft, R2 Function(R p1) ifRight) => _Left._(ifLeft(_value));
 }
 
 class _Right<L, R> extends Either<L, R> {
@@ -77,6 +82,9 @@ class _Right<L, R> extends Either<L, R> {
 
   @override
   R get value => _value;
+
+  @override
+  Either<L2, R2> bimap<L2, R2>(L2 Function(L p1) ifLeft, R2 Function(R p1) ifRight) => _Right._(ifRight(_value));
 }
 
 extension EitherExt<T> on T {
@@ -85,6 +93,6 @@ extension EitherExt<T> on T {
   }
 
   Either<L, R> right<L, R>() {
-    return Either<L, R>.right(this as R);
+    return _Right._(this as R);
   }
 }

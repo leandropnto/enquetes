@@ -46,8 +46,7 @@ void main() {
 
   test('Should fold a right value', () {
     final value = "any_value";
-    final sut =
-        Either.right(value).fold((l) => "Deu erro", (r) => r.toUpperCase());
+    final sut = Either.right(value).fold((l) => "Deu erro", (r) => r.toUpperCase());
     expect(sut, value.toUpperCase());
   });
 
@@ -71,17 +70,14 @@ void main() {
 
   test('Should map value', () {
     final value = " any_value ";
-    final sut =
-        Either.right(value).map((r) => r.toUpperCase()).map((r) => r.trim());
+    final sut = Either.right(value).map((r) => r.toUpperCase()).map((r) => r.trim());
     expect(sut.fold((l) => l, (r) => r), value.toUpperCase().trim());
   });
 
   test('Should map value with pipe operator', () {
     final value = " any_value ";
-    final sut = Either.right(value) |
-        (value) =>
-            Either.right(value.toUpperCase()) |
-            (value) => Either.right(value.trim());
+    final sut =
+        Either.right(value) | (value) => Either.right(value.toUpperCase()) | (value) => Either.right(value.trim());
     expect(sut.fold((l) => l, (r) => r), value.toUpperCase().trim());
   });
 
@@ -89,8 +85,7 @@ void main() {
     final value = " any_value ";
     final sut = Either<String, String>.right(value) |
         (value) =>
-            Either<String, String>.right(value.toUpperCase()) |
-            (value) => Either<String, String>.left("Some Error");
+            Either<String, String>.right(value.toUpperCase()) | (value) => Either<String, String>.left("Some Error");
     expect(sut.isLeft(), isTrue);
     expect(sut.fold((l) => l, (r) => r), "Some Error");
   });
@@ -99,5 +94,19 @@ void main() {
     final sut = "any_value".right<String, String>();
     expect(sut.isRight(), isTrue);
     expect(sut.fold((l) => l, (r) => r), "any_value");
+  });
+
+  test('Should map both sides of Either type', () {
+    final left = "1".left<String, String>();
+    final leftMapped = left.bimap((l) => int.parse(l), (r) => r.toUpperCase());
+
+    expect(leftMapped, isA<Either<int, String>>());
+
+    final right = "1".right();
+    final rightMapped = right.bimap<int, String>((l) => int.parse(l), (r) => r + " - one");
+
+    expect(rightMapped, isA<Either<int, String>>());
+    expect(rightMapped.value, isA<String>());
+    expect(rightMapped.value, "1 - one");
   });
 }

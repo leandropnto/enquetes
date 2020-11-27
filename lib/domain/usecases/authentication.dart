@@ -26,8 +26,8 @@ class AuthenticationFailures {
   factory AuthenticationFailures.unexpectedError(Exception exception) = AuthenticationUnexpectedError;
 
   R when<R>(
-    R Function(AuthenticationFailures) invalidCredentials,
-    R Function(AuthenticationUnexpectedError) unexpectedError,
+    R Function(AuthenticationFailures invalid) invalidCredentials,
+    R Function(AuthenticationUnexpectedError error) unexpectedError,
     R Function() orElse,
   ) {
     if (this is InvalidCredentials) {

@@ -83,8 +83,16 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
     _isLoading.value = true;
     try {
       final account = await authentication.auth(AuthenticationParams(email: _email, secret: _password));
-      saveCurrentAccount.save(account.value); //TODO: Refatorar isso.
-      navigate = "/surveys";
+      account.fold((l) {
+        l.when(
+          (invalid) => _mainError.value = UIError.invalidCredentials,
+          (error) => _mainError.value = UIError.unexpected,
+          () => _mainError.value = UIError.unexpected,
+        );
+      }, (r) {
+        saveCurrentAccount.save(account.value);
+        navigate = "/surveys";
+      });
     } on DomainError catch (e) {
       switch (e) {
         case DomainError.unexpected:
@@ -97,6 +105,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
           _mainError.value = UIError.invalidCredentials;
           break;
       }
+    } on Exception {
+      _mainError.value = UIError.unexpected;
+    } catch (e) {
+      _mainError.value = UIError.unexpected;
     }
 
     _isLoading.value = false;

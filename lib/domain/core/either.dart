@@ -17,7 +17,7 @@ abstract class Either<L, R> {
 
   Either<L, T> flatMap<T>(Either<L, T> Function(R) f);
 
-  Either<L1, R> mapLeft<L1>(L1 Function(L) f) => fold(
+  Either<L1, R> mapLeft<L1>(L1 Function(L error) f) => fold(
         (l) => Either.left(f(l)),
         (r) => Either.right(r),
       );

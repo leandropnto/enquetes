@@ -21,6 +21,8 @@ class RemoteAddAccount implements AddAccount {
     } on HttpError catch (error) {
       if (error == HttpError.forbidden) {
         return AddAccountFailures.emailInUse(params.email).left();
+      } else if (error == HttpError.unauthorized) {
+        return AddAccountFailures.invalidCredentials(params.email).left();
       }
 
       return AddAccountFailures.unexpectedError("Erro adicionando").left();

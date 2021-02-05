@@ -23,6 +23,8 @@ class GetxSignUpPresenter extends GetxController {
   final _isFormValid = false.obs;
   final _isLoading = false.obs;
 
+  final _navigateTo = RxString();
+
   String _name, _email, _password, _passwordConfirmation;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
@@ -33,11 +35,14 @@ class GetxSignUpPresenter extends GetxController {
 
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
 
-  Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
+  Stream<UIError> get passwordConfirmationErrorStream =>
+      _passwordConfirmationError.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
+
+  Stream<String> get navigateToStream => _navigateTo.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -93,7 +98,8 @@ class GetxSignUpPresenter extends GetxController {
 
   void validatePasswordConfirmation(String passwordConfirmation) {
     _passwordConfirmation = passwordConfirmation;
-    _passwordConfirmationError.value = _validateField(field: 'passwordConfirmation', value: passwordConfirmation);
+    _passwordConfirmationError.value = _validateField(
+        field: 'passwordConfirmation', value: passwordConfirmation);
     _validateForm();
   }
 
@@ -119,7 +125,7 @@ class GetxSignUpPresenter extends GetxController {
         ),
         (r) async => (await saveCurrentAccount.save(r)).fold(
           (l) => _mainError.value = UIError.unexpected,
-          (r) => {},
+          (r) => {_navigateTo.value = '/surveys'},
         ),
       );
     } on DomainError {

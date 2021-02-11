@@ -28,4 +28,6 @@ abstract class SignUpPresenter {
   Future<void> signUp();
 
   void dispose();
+
+  void goToLogin();
 }

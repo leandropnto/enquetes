@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:enquetes/domain/helpers/helpers.dart';
 import 'package:enquetes/domain/usecases/usecases.dart';
 import 'package:enquetes/ui/helpers/errors/ui_error.dart';
+import 'package:enquetes/ui/pages/signup/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController {
+class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final Validation validation;
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
@@ -41,8 +42,7 @@ class GetxSignUpPresenter extends GetxController {
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
-
-  Stream<String> get navigateToStream => _navigateTo.stream;
+  Stream<String> get navigateStream => _navigateTo.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -134,5 +134,9 @@ class GetxSignUpPresenter extends GetxController {
       _mainError.value = UIError.unexpected;
     }
     _isLoading.value = false;
+  }
+
+  void goToLogin() {
+    _navigateTo.value = "/login";
   }
 }

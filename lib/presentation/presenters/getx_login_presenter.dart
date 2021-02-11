@@ -46,8 +46,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   });
 
   void _validateForm() {
-    _isFormValid.value =
-        _emailError.value == null && _passwordError.value == null && _email != null && _password != null;
+    _isFormValid.value = _emailError.value == null &&
+        _passwordError.value == null &&
+        _email != null &&
+        _password != null;
   }
 
   UIError _validateField({String field, String value}) {
@@ -82,7 +84,8 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   Future<void> auth() async {
     _isLoading.value = true;
     try {
-      final account = await authentication.auth(AuthenticationParams(email: _email, secret: _password));
+      final account = await authentication
+          .auth(AuthenticationParams(email: _email, secret: _password));
       account.fold((l) {
         l.when(
           (invalid) => _mainError.value = UIError.invalidCredentials,
@@ -116,5 +119,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   void dispose() {
     debugPrint("dispose GetxLoginPresenter");
+  }
+
+  @override
+  void goToSignUp() {
+    _navigateTo.value = "/signup";
   }
 }

@@ -20,5 +20,5 @@ todos os campos obrigatórios não podem estar vazios.
 15. ✓ Notificar o isLoadingStream como false no final do Authentication.
 16. ✓ Notificar o mainErrorStream caso o Authentication retorne um DomainError.
 17. ✓ Fechar todos os Streams no dispose.
-18. ⛔️ Gravar o Account no cache em caso de sucesso.
-19. ⛔️ Levar o usuário para a tela de Enquetes em caso de sucesso.
+18. ✓ Gravar o Account no cache em caso de sucesso.
+19. ✓️ Levar o usuário para a tela de Enquetes em caso de sucesso.

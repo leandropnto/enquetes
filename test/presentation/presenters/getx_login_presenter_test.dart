@@ -18,22 +18,27 @@ class AuthenticationSpy extends Mock implements Authentication {}
 class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
-  Validation validation;
-  GetxLoginPresenter sut;
-  String email;
-  String password;
-  AuthenticationSpy authentication;
-  SaveCurrentAccount saveCurrentAccount;
+  Validation validation = ValidationSpy();
+  AuthenticationSpy authentication = AuthenticationSpy();
+  SaveCurrentAccount saveCurrentAccount = SaveCurrentAccountSpy();
+  GetxLoginPresenter sut = GetxLoginPresenter(
+    validation: validation,
+    authentication: authentication,
+    saveCurrentAccount: saveCurrentAccount,
+  );
+  String email = faker.internet.email();
+  String password = faker.internet.password();
 
-  PostExpectation mockValidationCall(String field) => when(validation.validate(
-      field: field == null ? anyNamed('field') : field,
-      value: anyNamed('value')));
+  PostExpectation mockValidationCall(String field) =>
+      when(validation.validate(field: field, value: anyNamed('value') ?? ""));
 
-  void mockValidation({String field, Option<ValidationError> value}) {
+  void mockValidation(
+      {required String field, required Option<ValidationError> value}) {
     mockValidationCall(field).thenReturn(value);
   }
 
-  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+  PostExpectation mockAuthenticationCall() =>
+      when(authentication.auth(AuthenticationParams(email: "", secret: "")));
 
   void mockAuthentication() {
     mockAuthenticationCall().thenAnswer((_) async =>
@@ -46,17 +51,9 @@ void main() {
   }
 
   setUp(() {
-    validation = ValidationSpy();
-    authentication = AuthenticationSpy();
-    saveCurrentAccount = SaveCurrentAccountSpy();
-    sut = GetxLoginPresenter(
-      validation: validation,
-      authentication: authentication,
-      saveCurrentAccount: saveCurrentAccount,
-    );
     email = faker.internet.email();
     password = faker.internet.password();
-    mockValidation(value: None<ValidationError>());
+    mockValidation(field: "", value: None<ValidationError>());
     mockAuthentication();
   });
 
@@ -68,7 +65,7 @@ void main() {
     });
 
     test('Should emit email error if validation fails', () {
-      mockValidation(value: Some(ValidationError.invalidField));
+      mockValidation(field: "", value: Some(ValidationError.invalidField));
 
       sut.emailErrorStream
           .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -98,7 +95,7 @@ void main() {
     });
 
     test('Should emit password error if validation fails', () {
-      mockValidation(value: Some(ValidationError.requiredField));
+      mockValidation(field: "", value: Some(ValidationError.requiredField));
 
       sut.passwordErrorStream.listen(
           expectAsync1((error) => expect(error, UIError.requiredField)));

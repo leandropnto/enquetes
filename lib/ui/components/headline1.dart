@@ -4,7 +4,7 @@ class HeadLine1 extends StatelessWidget {
   final String text;
 
   const HeadLine1({
-    Key key,
+    Key? key,
     this.text = "HeadLine 1",
   }) : super(key: key);
 

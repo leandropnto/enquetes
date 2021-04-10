@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:enquetes/ui/helpers/errors/ui_error.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
@@ -15,34 +14,34 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Authentication authentication;
   final SaveCurrentAccount saveCurrentAccount;
 
-  final _emailError = Rx<UIError>();
-  final _passwordError = Rx<UIError>();
-  final _mainError = Rx<UIError>();
+  final _emailError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
+  final _mainError = Rx<UIError?>(null);
   final _isFormValid = false.obs;
   final _isLoading = false.obs;
-  final _navigateTo = RxString();
+  final _navigateTo = RxString("");
 
-  String _email;
-  String _password;
+  String? _email;
+  String? _password;
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
 
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
-  Stream<UIError> get mainErrorStream => _mainError.stream;
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
 
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool?> get isFormValidStream => _isFormValid.stream;
 
-  Stream<bool> get isLoadingStream => _isLoading.stream;
+  Stream<bool?> get isLoadingStream => _isLoading.stream;
 
-  Stream<String> get navigateStream => _navigateTo.stream;
+  Stream<String?> get navigateStream => _navigateTo.stream;
 
   set navigate(String value) => _navigateTo.value = value;
 
   GetxLoginPresenter({
-    @required this.authentication,
-    @required this.validation,
-    @required this.saveCurrentAccount,
+    required this.authentication,
+    required this.validation,
+    required this.saveCurrentAccount,
   });
 
   void _validateForm() {
@@ -52,7 +51,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
         _password != null;
   }
 
-  UIError _validateField({String field, String value}) {
+  UIError? _validateField({required String field, required String value}) {
     final error = validation.validate(field: field, value: value);
     return error.fold(ifNone: () {
       return null;
@@ -69,23 +68,24 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
     });
   }
 
-  void validateEmail(String email) {
+  void validateEmail(String? email) {
     _email = email;
-    _emailError.value = _validateField(field: 'email', value: email);
+    _emailError.value = _validateField(field: 'email', value: email ?? "");
     _validateForm();
   }
 
-  void validatePassword(String password) {
+  void validatePassword(String? password) {
     _password = password;
-    _passwordError.value = _validateField(field: 'password', value: password);
+    _passwordError.value =
+        _validateField(field: 'password', value: password ?? "");
     _validateForm();
   }
 
   Future<void> auth() async {
     _isLoading.value = true;
     try {
-      final account = await authentication
-          .auth(AuthenticationParams(email: _email, secret: _password));
+      final account = await authentication.auth(
+          AuthenticationParams(email: _email ?? "", secret: _password ?? ""));
       account.fold((l) {
         l.when(
           (invalid) => _mainError.value = UIError.invalidCredentials,

@@ -11,13 +11,10 @@ class SplashPagePresenterSpy extends Mock implements SplashPresenter {}
 void main() {
   //Variables
 
-  SplashPresenter presenter;
-  StreamController navigateToController;
+  SplashPresenter presenter = SplashPagePresenterSpy();
+  StreamController<String?> navigateToController = StreamController<String?>();
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = SplashPagePresenterSpy();
-    navigateToController = StreamController<String>();
-
     when(presenter.navigateToStream)
         .thenAnswer((_) => navigateToController.stream);
 

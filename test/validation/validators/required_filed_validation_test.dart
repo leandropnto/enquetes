@@ -4,10 +4,8 @@ import 'package:enquetes/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
 void main() {
-  RequiredFieldValidation sut;
-  setUp(() {
-    sut = RequiredFieldValidation('any_field');
-  });
+  RequiredFieldValidation sut = RequiredFieldValidation('any_field');
+  setUp(() {});
   test('Should return None if value is not empty', () {
     expect(sut.validate('any_value'), None<ValidationError>());
   });

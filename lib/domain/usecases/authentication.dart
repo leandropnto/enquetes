@@ -1,18 +1,18 @@
 import 'package:enquetes/domain/core/core.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 import '../entities/entities.dart';
 
 abstract class Authentication {
-  Future<Either<AuthenticationFailures, AccountEntity>> auth(AuthenticationParams params);
+  Future<Either<AuthenticationFailures, AccountEntity>> auth(
+      AuthenticationParams params);
 }
 
 class AuthenticationParams extends Equatable {
   final String email;
   final String secret;
 
-  AuthenticationParams({@required this.email, @required this.secret});
+  AuthenticationParams({required this.email, required this.secret});
 
   @override
   List<Object> get props => [email, secret];
@@ -21,9 +21,11 @@ class AuthenticationParams extends Equatable {
 class AuthenticationFailures {
   AuthenticationFailures._();
 
-  factory AuthenticationFailures.invalidCredentials(AuthenticationParams params) = InvalidCredentials;
+  factory AuthenticationFailures.invalidCredentials(
+      AuthenticationParams params) = InvalidCredentials;
 
-  factory AuthenticationFailures.unexpectedError(Exception exception) = AuthenticationUnexpectedError;
+  factory AuthenticationFailures.unexpectedError(Exception exception) =
+      AuthenticationUnexpectedError;
 
   R when<R>(
     R Function(AuthenticationFailures invalid) invalidCredentials,
@@ -32,8 +34,8 @@ class AuthenticationFailures {
   ) {
     if (this is InvalidCredentials) {
       return invalidCredentials(this);
-    } else if (this is AuthenticationUnexpectedError) {
-      return unexpectedError(this);
+    } else if ((this is AuthenticationUnexpectedError)) {
+      return unexpectedError(this as AuthenticationUnexpectedError);
     } else {
       return orElse();
     }

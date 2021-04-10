@@ -11,26 +11,18 @@ import 'package:mockito/mockito.dart';
 class SignUpPresenterSpy extends Mock implements SignUpPresenter {}
 
 void main() {
-  SignUpPresenter presenter;
-  StreamController<UIError> nameErrorController;
-  StreamController<UIError> emailErrorController;
-  StreamController<UIError> passwordErrorController;
-  StreamController<UIError> passwordConfirmationErrorController;
-  StreamController<bool> isFormValidController;
-  StreamController<bool> isLoadingController;
-  StreamController<UIError> mainErrorController;
-  StreamController<String> navigationController;
-
-  void initStreams() {
-    nameErrorController = StreamController<UIError>();
-    emailErrorController = StreamController<UIError>();
-    passwordErrorController = StreamController<UIError>();
-    passwordConfirmationErrorController = StreamController<UIError>();
-    isFormValidController = StreamController<bool>();
-    isLoadingController = StreamController<bool>();
-    mainErrorController = StreamController<UIError>();
-    navigationController = StreamController<String>();
-  }
+  SignUpPresenter presenter = Get.put<SignUpPresenter>(SignUpPresenterSpy());
+  StreamController<UIError?> nameErrorController = StreamController<UIError?>();
+  StreamController<UIError?> emailErrorController =
+      StreamController<UIError?>();
+  StreamController<UIError?> passwordErrorController =
+      StreamController<UIError?>();
+  StreamController<UIError?> passwordConfirmationErrorController =
+      StreamController<UIError?>();
+  StreamController<bool> isFormValidController = StreamController<bool>();
+  StreamController<bool> isLoadingController = StreamController<bool>();
+  StreamController<UIError?> mainErrorController = StreamController<UIError?>();
+  StreamController<String> navigationController = StreamController<String>();
 
   void mockStreams() {
     when(presenter.nameErrorStream)
@@ -70,10 +62,6 @@ void main() {
   }
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = Get.put<SignUpPresenter>(SignUpPresenterSpy());
-
-    initStreams();
-
     mockStreams();
 
     final signUpPage = GetMaterialApp(

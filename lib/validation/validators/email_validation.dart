@@ -5,19 +5,19 @@ import 'package:equatable/equatable.dart';
 import '../protocols/protocols.dart';
 
 class EmailValidation extends Equatable implements FieldValidation {
-  final String field;
+  final String? field;
 
   static final regexp = RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$");
 
   EmailValidation(this.field);
 
   @override
-  Option<ValidationError> validate(String value) {
-    return value?.isNotEmpty != true || regexp.hasMatch(value)
+  Option<ValidationError> validate(String? value) {
+    return value?.isNotEmpty != true || regexp.hasMatch(value!!)
         ? None()
         : Some(ValidationError.invalidField);
   }
 
   @override
-  List<Object> get props => [field];
+  List<Object?> get props => [field];
 }

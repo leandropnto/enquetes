@@ -4,7 +4,7 @@ import 'package:enquetes/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
 void main() {
-  EmailValidation sut;
+  EmailValidation sut = EmailValidation('any_field');
 
   setUp(() {
     sut = EmailValidation('any_field');

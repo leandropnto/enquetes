@@ -16,28 +16,38 @@ class AddAccountSpy extends Mock implements AddAccount {}
 class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
-  Validation validation;
-  AddAccount addAccount;
-  SaveCurrentAccountSpy saveCurrentAccount;
-  GetxSignUpPresenter sut;
-  String email;
-  String name;
-  String password;
-  String passwordConfirmation;
+  Validation validation = ValidationSpy();
+  AddAccount addAccount = AddAccountSpy();
+  SaveCurrentAccountSpy saveCurrentAccount = SaveCurrentAccountSpy();
+  GetxSignUpPresenter sut = GetxSignUpPresenter(
+    validation: validation,
+    addAccount: addAccount,
+    saveCurrentAccount: saveCurrentAccount,
+  );
+
+  String email = faker.internet.email();
+  String name = faker.person.name();
+  String password = faker.internet.password();
+  String passwordConfirmation = password;
   String token = faker.guid.guid();
 
-  PostExpectation mockValidationCall(String field) => when(validation.validate(
-      field: field == null ? anyNamed('field') : field,
-      value: anyNamed('value')));
+  PostExpectation mockValidationCall(String field) =>
+      when(validation.validate(field: field, value: anyNamed('value') ?? ""));
 
   PostExpectation saveCurrentAccountCall() =>
-      when(saveCurrentAccount.save(any));
+      when(saveCurrentAccount.save(AccountEntity(Token.of(""))));
 
-  void mockValidation({String field, Option<ValidationError> value}) {
+  void mockValidation(
+      {required String field, required Option<ValidationError> value}) {
     mockValidationCall(field).thenReturn(value);
   }
 
-  PostExpectation mockAddAccountCall() => when(addAccount.add(any));
+  PostExpectation mockAddAccountCall() => when(addAccount.add(AddAccountParams(
+        name: "",
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+      )));
   void mockAddAccount() {
     mockAddAccountCall().thenAnswer((_) async {
       return AccountEntity(Token.of(token))
@@ -61,20 +71,7 @@ void main() {
   }
 
   setUp(() {
-    validation = ValidationSpy();
-    addAccount = AddAccountSpy();
-    saveCurrentAccount = SaveCurrentAccountSpy();
-
-    sut = GetxSignUpPresenter(
-      validation: validation,
-      addAccount: addAccount,
-      saveCurrentAccount: saveCurrentAccount,
-    );
-    email = faker.internet.email();
-    name = faker.person.name();
-    password = faker.internet.password();
-    passwordConfirmation = password;
-    mockValidation(value: None<ValidationError>());
+    mockValidation(field: "", value: None<ValidationError>());
     mockAddAccount();
     mockSaveCurrentAccount();
   });
@@ -87,7 +84,7 @@ void main() {
     });
 
     test('Should emit email error if validation fails', () {
-      mockValidation(value: Some(ValidationError.invalidField));
+      mockValidation(field: "", value: Some(ValidationError.invalidField));
 
       sut.emailErrorStream
           .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -118,7 +115,7 @@ void main() {
     });
 
     test('Should emit name error if validation fails', () {
-      mockValidation(value: Some(ValidationError.invalidField));
+      mockValidation(field: "", value: Some(ValidationError.invalidField));
 
       sut.nameErrorStream
           .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -149,7 +146,7 @@ void main() {
     });
 
     test('Should emit password error if validation fails', () {
-      mockValidation(value: Some(ValidationError.invalidField));
+      mockValidation(field: "", value: Some(ValidationError.invalidField));
 
       sut.passwordErrorStream
           .listen(expectAsync1((error) => expect(error, UIError.invalidField)));
@@ -183,7 +180,7 @@ void main() {
     });
 
     test('Should emit passwordConfirmation error if validation fails', () {
-      mockValidation(value: Some(ValidationError.invalidField));
+      mockValidation(field: "", value: Some(ValidationError.invalidField));
 
       sut.passwordConfirmationErrorStream
           .listen(expectAsync1((error) => expect(error, UIError.invalidField)));

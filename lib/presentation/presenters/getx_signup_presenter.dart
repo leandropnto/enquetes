@@ -6,7 +6,6 @@ import 'package:enquetes/ui/helpers/errors/ui_error.dart';
 import 'package:enquetes/ui/pages/signup/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
 
@@ -15,39 +14,39 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final AddAccount addAccount;
   final SaveCurrentAccount saveCurrentAccount;
 
-  final _emailError = Rx<UIError>();
-  final _nameError = Rx<UIError>();
-  final _mainError = Rx<UIError>();
-  final _passwordError = Rx<UIError>();
-  final _passwordConfirmationError = Rx<UIError>();
+  final _emailError = Rx<UIError?>(null);
+  final _nameError = Rx<UIError?>(null);
+  final _mainError = Rx<UIError?>(null);
+  final _passwordError = Rx<UIError?>(null);
+  final _passwordConfirmationError = Rx<UIError?>(null);
 
-  final _isFormValid = false.obs;
-  final _isLoading = false.obs;
+  final Rx<bool?> _isFormValid = false.obs;
+  final Rx<bool?> _isLoading = false.obs;
 
-  final _navigateTo = RxString();
+  final Rx<String?> _navigateTo = Rx<String?>(null);
 
-  String _name, _email, _password, _passwordConfirmation;
+  String? _name, _email, _password, _passwordConfirmation;
 
-  Stream<UIError> get emailErrorStream => _emailError.stream;
+  Stream<UIError?> get emailErrorStream => _emailError.stream;
 
-  Stream<UIError> get nameErrorStream => _nameError.stream;
+  Stream<UIError?> get nameErrorStream => _nameError.stream;
 
-  Stream<UIError> get mainErrorStream => _mainError.stream;
+  Stream<UIError?> get mainErrorStream => _mainError.stream;
 
-  Stream<UIError> get passwordErrorStream => _passwordError.stream;
+  Stream<UIError?> get passwordErrorStream => _passwordError.stream;
 
-  Stream<UIError> get passwordConfirmationErrorStream =>
+  Stream<UIError?> get passwordConfirmationErrorStream =>
       _passwordConfirmationError.stream;
 
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool?> get isFormValidStream => _isFormValid.stream;
 
-  Stream<bool> get isLoadingStream => _isLoading.stream;
-  Stream<String> get navigateStream => _navigateTo.stream;
+  Stream<bool?> get isLoadingStream => _isLoading.stream;
+  Stream<String?> get navigateStream => _navigateTo.stream;
 
   GetxSignUpPresenter({
-    @required this.validation,
-    @required this.addAccount,
-    @required this.saveCurrentAccount,
+    required this.validation,
+    required this.addAccount,
+    required this.saveCurrentAccount,
   });
 
   void _validateForm() {
@@ -61,7 +60,7 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
         _passwordConfirmation != null;
   }
 
-  UIError _validateField({String field, String value}) {
+  UIError? _validateField({required String field, required String value}) {
     final error = validation.validate(field: field, value: value);
     return error.fold(ifNone: () {
       return null;
@@ -111,10 +110,10 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
     _isLoading.value = true;
     try {
       final account = await addAccount.add(AddAccountParams(
-        name: _name,
-        email: _email,
-        password: _password,
-        passwordConfirmation: _passwordConfirmation,
+        name: _name ?? "",
+        email: _email ?? "",
+        password: _password ?? "",
+        passwordConfirmation: _passwordConfirmation ?? "",
       ));
       account.fold(
         (l) => l.when(

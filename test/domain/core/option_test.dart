@@ -28,7 +28,7 @@ void main() {
   });
 
   test('Should throws if Option is empty', () {
-    Option<String> option = Some(null);
+    Option<String?> option = Some(null);
     expect(() => option.value, throwsA(TypeMatcher<Exception>()));
   });
 
@@ -47,8 +47,7 @@ void main() {
   test('Should produce OrElse value if None', () {
     final text = "any_string";
     Option<String> option = None<String>();
-    final mappedString =
-        option.map((value) => value.toUpperCase(), orElse: () => text);
+    final mappedString = option.map((value) => value.toUpperCase());
     expect(mappedString.value, text);
   });
 

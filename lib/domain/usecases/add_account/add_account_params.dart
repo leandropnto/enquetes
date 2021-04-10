@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 class AddAccountParams extends Equatable {
   final String name;
@@ -8,10 +7,10 @@ class AddAccountParams extends Equatable {
   final String passwordConfirmation;
 
   AddAccountParams({
-    @required this.name,
-    @required this.email,
-    @required this.password,
-    @required this.passwordConfirmation,
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.passwordConfirmation,
   });
 
   @override

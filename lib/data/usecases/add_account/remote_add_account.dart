@@ -1,6 +1,5 @@
 import 'package:enquetes/data/models/models.dart';
 import 'package:enquetes/domain/core/core.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../domain/entities/entities.dart';
 import '../../../domain/usecases/usecases.dart';
@@ -11,12 +10,14 @@ class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
   final String url;
 
-  RemoteAddAccount({@required this.httpClient, @required this.url});
+  RemoteAddAccount({required this.httpClient, required this.url});
 
-  Future<Either<AddAccountFailures, AccountEntity>> add(AddAccountParams params) async {
+  Future<Either<AddAccountFailures, AccountEntity>> add(
+      AddAccountParams params) async {
     try {
       final body = RemoteAddAccountParams.fromDomain(params).toJson();
-      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse =
+          await httpClient.request(url: url, method: 'post', body: body);
       return RemoteAccountModel.fromJson(httpResponse).toEntity().right();
     } on HttpError catch (error) {
       if (error == HttpError.forbidden) {

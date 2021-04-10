@@ -9,10 +9,11 @@ class LoadCurrentAccountSpy extends Mock implements LoadCurrentAccount {}
 
 void main() {
   //Variables
-  LoadCurrentAccount loadCurrentAccount;
-  GetxSplashPresenter sut;
+  LoadCurrentAccount loadCurrentAccount = LoadCurrentAccountSpy();
+  GetxSplashPresenter sut =
+      GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
   //Mocks
-  void mockLoadAccount(AccountEntity accountEntity) {
+  void mockLoadAccount(AccountEntity? accountEntity) {
     when(loadCurrentAccount.load()).thenAnswer((_) async => accountEntity);
   }
 
@@ -22,8 +23,6 @@ void main() {
   //helpers
 
   setUp(() {
-    loadCurrentAccount = LoadCurrentAccountSpy();
-    sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
     mockLoadAccount(AccountEntity(Token.of(faker.guid.guid())));
   });
 

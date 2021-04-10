@@ -9,7 +9,7 @@ import 'login_presenter.dart';
 class LoginPage extends StatefulWidget {
   final LoginPresenter presenter;
 
-  const LoginPage({Key key, this.presenter}) : super(key: key);
+  const LoginPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -27,14 +27,15 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(body: Builder(
       builder: (context) {
         widget.presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading) {
+          if (isLoading ?? false) {
             showLoading(context, message: "Efetuando login...");
           } else {
             hideLoading(context);
           }
         });
 
-        widget.presenter.navigateStream.listen((page) => Get.offAllNamed(page));
+        widget.presenter.navigateStream
+            .listen((page) => Get.offAllNamed(page ?? ""));
         widget.presenter.mainErrorStream.listen((error) {
           if (error != null) {
             showErrorMessage(context, error.description);

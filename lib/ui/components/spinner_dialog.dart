@@ -4,7 +4,7 @@ void showLoading(BuildContext context, {String message = "Aguarde..."}) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    child: SimpleDialog(
+    builder: (context) => SimpleDialog(
       children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.center,

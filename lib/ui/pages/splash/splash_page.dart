@@ -6,7 +6,7 @@ import 'splash_presenter.dart';
 class SplashPage extends StatelessWidget {
   final SplashPresenter presenter;
 
-  const SplashPage({Key key, @required this.presenter}) : super(key: key);
+  const SplashPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SplashPage extends StatelessWidget {
       body: Builder(
         builder: (context) {
           presenter.navigateToStream.listen((route) =>
-              route?.isNotEmpty == true ? Get.offAllNamed(route) : () {});
+              route?.isNotEmpty == true ? Get.offAllNamed(route!!) : () {});
           return Container(
             alignment: Alignment.center,
             child: Column(

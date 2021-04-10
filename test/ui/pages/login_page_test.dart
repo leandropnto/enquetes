@@ -12,22 +12,15 @@ import 'package:mockito/mockito.dart';
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
-  LoginPresenter presenter;
-  StreamController<UIError> emailErrorController;
-  StreamController<UIError> passwordErrorController;
-  StreamController<bool> isFormValidController;
-  StreamController<bool> isLoadingController;
-  StreamController<UIError> mainErrorController;
-  StreamController<String> navigationController;
-
-  void initStreams() {
-    emailErrorController = StreamController<UIError>();
-    passwordErrorController = StreamController<UIError>();
-    isFormValidController = StreamController<bool>();
-    isLoadingController = StreamController<bool>();
-    mainErrorController = StreamController<UIError>();
-    navigationController = StreamController<String>();
-  }
+  LoginPresenter presenter = Get.put<LoginPresenter>(LoginPresenterSpy());
+  StreamController<UIError?> emailErrorController =
+      StreamController<UIError?>();
+  StreamController<UIError?> passwordErrorController =
+      StreamController<UIError?>();
+  StreamController<bool> isFormValidController = StreamController<bool>();
+  StreamController<bool> isLoadingController = StreamController<bool>();
+  StreamController<UIError> mainErrorController = StreamController<UIError>();
+  StreamController<String> navigationController = StreamController<String>();
 
   void mockStreams() {
     when(presenter.emailErrorStream)
@@ -59,10 +52,6 @@ void main() {
   }
 
   Future<void> loadPage(WidgetTester tester) async {
-    presenter = Get.put<LoginPresenter>(LoginPresenterSpy());
-
-    initStreams();
-
     mockStreams();
 
     final loginPage = GetMaterialApp(

@@ -19,7 +19,7 @@ abstract class ValueObject<T> {
     return value.fold((l) => throw UnexpectedValueError(l), (r) => r);
   }
 
-  String mapToErrorMessage(String errorText) =>
+  String? mapToErrorMessage(String errorText) =>
       value.isLeft() ? errorText : null;
 
   @override

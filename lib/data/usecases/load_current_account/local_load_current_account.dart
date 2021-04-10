@@ -6,7 +6,7 @@ import 'package:enquetes/domain/usecases/usecases.dart';
 class LocalLoadCurrentAccount implements LoadCurrentAccount {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
 
-  LocalLoadCurrentAccount({this.fetchSecureCacheStorage});
+  LocalLoadCurrentAccount({required this.fetchSecureCacheStorage});
 
   Future<AccountEntity> load() async {
     try {

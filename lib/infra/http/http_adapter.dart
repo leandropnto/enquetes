@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:enquetes/data/http/http.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 
 class HttpAdapter implements HttpClient {
   final Client client;
@@ -10,9 +9,9 @@ class HttpAdapter implements HttpClient {
   HttpAdapter(this.client);
 
   Future<Map> request({
-    @required String url,
-    @required String method,
-    Map body,
+    required String url,
+    required String method,
+    Map? body,
   }) async {
     final headers = {
       'content-type': 'application/json',
@@ -25,12 +24,12 @@ class HttpAdapter implements HttpClient {
   }
 
   Future<Response> _createResponse(String method, String url,
-      Map<String, String> headers, String jsonBody) async {
+      Map<String, String>? headers, String? jsonBody) async {
     try {
       switch (method) {
         case 'post':
           return await client.post(
-            url,
+            Uri.parse(url),
             headers: headers,
             body: jsonBody,
           );

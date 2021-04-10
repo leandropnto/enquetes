@@ -11,15 +11,22 @@ import 'package:mockito/mockito.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
-  RemoteAddAccount sut;
-  HttpClientSpy httpClient;
-  String url;
-  AddAccountParams params;
-  String password;
-  Map httpResponse;
+  String password = faker.internet.password();
+  HttpClientSpy httpClient = HttpClientSpy();
+  String url = faker.internet.httpsUrl();
+  RemoteAddAccount sut = RemoteAddAccount(httpClient: httpClient, url: url);
+  AddAccountParams params = AddAccountParams(
+      name: faker.person.name(),
+      email: faker.internet.email(),
+      password: password,
+      passwordConfirmation: password);
 
   PostExpectation mockRequest() => when(
-        httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')),
+        httpClient.request(
+          url: anyNamed('url') ?? "",
+          method: anyNamed('method') ?? "",
+          body: anyNamed('body') ?? {},
+        ),
       );
 
   void mockHttpData(Map data) {
@@ -30,17 +37,12 @@ void main() {
     mockRequest().thenThrow(error);
   }
 
-  Map mockValidData() => {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
+  Map mockValidData() =>
+      {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
+
+  Map httpResponse = mockValidData();
 
   setUp(() {
-    password = faker.internet.password();
-    httpClient = HttpClientSpy();
-    url = faker.internet.httpsUrl();
-    sut = RemoteAddAccount(httpClient: httpClient, url: url);
-    params = AddAccountParams(
-        name: faker.person.name(), email: faker.internet.email(), password: password, passwordConfirmation: password);
-
-    httpResponse = mockValidData();
     mockHttpData(httpResponse);
   });
 
@@ -83,11 +85,12 @@ void main() {
   test('Should return an Account if HttpClient returns 200 ', () async {
     final account = await sut.add(params);
 
-    account.fold(
-        (l) => throw Exception("Error get token"), (r) => expect(r.token.getOrCrash(), httpResponse['accessToken']));
+    account.fold((l) => throw Exception("Error get token"),
+        (r) => expect(r.token.getOrCrash(), httpResponse['accessToken']));
   });
 
-  test('Should throw unexpectedError if HttpClient return 200 if invalid data ', () async {
+  test('Should throw unexpectedError if HttpClient return 200 if invalid data ',
+      () async {
     mockHttpData({'invalid_key': 'invalid_value'});
     final future = await sut.add(params);
 

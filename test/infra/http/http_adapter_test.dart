@@ -8,21 +8,15 @@ import 'package:mockito/mockito.dart';
 class ClientSpy extends Mock implements Client {}
 
 void main() {
-  Client client;
-  HttpAdapter sut;
-  String url;
-
-  setUp(() {
-    client = ClientSpy();
-    sut = HttpAdapter(client);
-    url = faker.internet.httpUrl();
-  });
+  Client client = ClientSpy();
+  HttpAdapter sut = HttpAdapter(client);
+  String url = faker.internet.httpUrl();
 
   group('post', () {
     PostExpectation<Future<Response>> mockRequest() {
       return when(
         client.post(
-          any,
+          Uri.parse("https://google.com"),
           headers: anyNamed('headers'),
           body: anyNamed("body"),
         ),
@@ -48,7 +42,7 @@ void main() {
 
       verify(
         client.post(
-          url,
+          Uri.parse(url),
           headers: {
             'content-type': 'application/json',
             'accept': 'application/json',
@@ -63,7 +57,7 @@ void main() {
 
       verify(
         client.post(
-          any,
+          Uri.parse("https://google.com"),
           headers: anyNamed('headers'),
         ),
       );
@@ -71,7 +65,6 @@ void main() {
 
     test('Should return data if post returns 200', () async {
       final response = await sut.request(url: url, method: 'post');
-
       expect(response, {"any_key": "any_value"});
     });
 

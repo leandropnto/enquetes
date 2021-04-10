@@ -9,22 +9,20 @@ abstract class Option<T> extends Equatable {
 
   bool isNone();
 
-  R fold<R>({R ifNone(), R ifSome(T a)});
+  R fold<R>({required R ifNone(), required R ifSome(T a)});
 
-  Option<R> map<R>(Function(T value) block, {R Function() orElse}) {
-    return isSome()
-        ? optionOf(block(value))
-        : orElse != null
-            ? some(orElse())
-            : none();
-  }
+  Option<R> map<R>(Function(T value) block);
+
+  // Option<R> map<R>(Function(T value) block) {
+  //   return isSome() ? optionOf(block(value)) : none();
+  // }
 
   Option<T> operator |(Function(T value) block);
 
   T get value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class Some<A> extends Option<A> {
@@ -32,10 +30,12 @@ class Some<A> extends Option<A> {
 
   const Some(this._value) : super._();
 
-  A get value => _value != null ? _value : throw Exception("Empty Option exception");
+  A get value =>
+      _value != null ? _value : throw Exception("Empty Option exception");
 
   @override
-  R fold<R>({R Function() ifNone, R Function(A a) ifSome}) => ifSome(_value);
+  R fold<R>({required R Function() ifNone, required R Function(A a) ifSome}) =>
+      ifSome(_value);
 
   @override
   Option<A> operator |(Function(A value) block) => optionOf(block(_value));
@@ -45,6 +45,11 @@ class Some<A> extends Option<A> {
 
   @override
   bool isSome() => true;
+
+  @override
+  Option<R> map<R>(Function(A value) block) {
+    return isSome() ? block(value) : none();
+  }
 }
 
 class None<T> extends Option<T> {
@@ -53,7 +58,8 @@ class None<T> extends Option<T> {
   factory None() => const None._();
 
   @override
-  R fold<R>({R Function() ifNone, R Function(T a) ifSome}) => ifNone();
+  R fold<R>({required R Function() ifNone, required R Function(T a) ifSome}) =>
+      ifNone();
 
   @override
   Option<T> operator |(Function(T value) block) => None();
@@ -66,6 +72,11 @@ class None<T> extends Option<T> {
 
   @override
   bool isNone() => true;
+
+  @override
+  Option<R> map<R>(Function(T value) block) {
+    return none();
+  }
 }
 
 Option<A> none<A>() => new None();

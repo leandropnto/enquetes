@@ -11,9 +11,11 @@ class FetchSecureCacheStorageSpy extends Mock
 
 void main() {
   //Variables
-  LocalLoadCurrentAccount sut;
-  FetchSecureCacheStorage fetchSecureCacheStorage;
-  String token;
+  FetchSecureCacheStorage fetchSecureCacheStorage =
+      FetchSecureCacheStorageSpy();
+  LocalLoadCurrentAccount sut =
+      LocalLoadCurrentAccount(fetchSecureCacheStorage: fetchSecureCacheStorage);
+  String token = faker.guid.guid();
   //Mocks
 
   void mockLoadCurrentAccount(String token) {
@@ -23,14 +25,10 @@ void main() {
   //helpers
 
   void mockLoadError() {
-    when(fetchSecureCacheStorage.fetchSecure(any)).thenThrow(Exception());
+    when(fetchSecureCacheStorage.fetchSecure("")).thenThrow(Exception());
   }
 
   setUp(() {
-    fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
-    sut = LocalLoadCurrentAccount(
-        fetchSecureCacheStorage: fetchSecureCacheStorage);
-    token = faker.guid.guid();
     mockLoadCurrentAccount(token);
   });
 

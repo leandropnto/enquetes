@@ -10,7 +10,7 @@ class PasswordInput extends StatelessWidget {
     final presenter = Get.find<LoginPresenter>();
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 32),
-      child: StreamBuilder<UIError>(
+      child: StreamBuilder<UIError?>(
         stream: presenter.passwordErrorStream,
         builder: (context, snapshot) {
           return TextFormField(
@@ -20,7 +20,7 @@ class PasswordInput extends StatelessWidget {
                 Icons.lock,
                 color: Theme.of(context).primaryColorLight,
               ),
-              errorText: snapshot.hasData ? snapshot.data.description : null,
+              errorText: snapshot.hasData ? snapshot.data?.description : null,
             ),
             obscureText: true,
             onChanged: presenter.validatePassword,

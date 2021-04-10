@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

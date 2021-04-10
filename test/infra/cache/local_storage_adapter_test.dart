@@ -9,33 +9,29 @@ class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {}
 
 void main() {
   //Variables
-  LocalStorageAdapter sut;
-  FlutterSecureStorage secureStorage;
-  String value;
-  String key;
+  FlutterSecureStorage secureStorage = FlutterSecureStorageSpy();
+  LocalStorageAdapter sut = LocalStorageAdapter(secureStorage: secureStorage);
+  String value = faker.lorem.word();
+  String key = faker.guid.guid();
   //Mocks
   void mockSaveSecureWriteError() {
-    when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+    when(secureStorage.write(
+            key: anyNamed('key') ?? "", value: anyNamed('value')))
         .thenThrow(Exception());
   }
 
   void mockFetchSecure() {
-    when(secureStorage.read(key: anyNamed('key')))
+    when(secureStorage.read(key: anyNamed('key') ?? ""))
         .thenAnswer((_) async => value);
   }
 
   void mockFetchSecureError() {
-    when(secureStorage.read(key: anyNamed('key'))).thenThrow(Exception());
+    when(secureStorage.read(key: anyNamed('key') ?? "")).thenThrow(Exception());
   }
   //helpers
 
   //setup
-  setUp(() {
-    secureStorage = FlutterSecureStorageSpy();
-    sut = LocalStorageAdapter(secureStorage: secureStorage);
-    key = faker.lorem.word();
-    value = faker.guid.guid();
-  });
+  setUp(() {});
 
   group('saveSecure', () {
     test('Should call Save Secure with correct values', () async {

@@ -13,19 +13,15 @@ class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {
 }
 
 void main() {
-  SaveSecureCacheStorageSpy saveSecureCacheStorage;
-  LocalSaveCurrentAccount sut;
-  AccountEntity account;
-  setUp(() {
-    saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    sut =
-        LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
-    account = AccountEntity(Token.of(faker.guid.guid()));
-  });
+  SaveSecureCacheStorageSpy saveSecureCacheStorage =
+      SaveSecureCacheStorageSpy();
+  LocalSaveCurrentAccount sut =
+      LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+  AccountEntity account = AccountEntity(Token.of(faker.guid.guid()));
 
   void mockError(SaveSecureCacheStorageSpy saveSecureCacheStorage) async {
     when(saveSecureCacheStorage.saveSecure(
-            key: anyNamed('key'), value: anyNamed('value')))
+            key: anyNamed('key') ?? "", value: anyNamed('value') ?? ""))
         .thenAnswer((_) => Future.delayed(Duration.zero,
             () => ValueFailure.unexpectedError(Exception()).left()));
   }

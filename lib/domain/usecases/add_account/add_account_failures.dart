@@ -3,8 +3,10 @@ class AddAccountFailures {
 
   factory AddAccountFailures.emailInUse(String email) = EmailInUse;
 
-  factory AddAccountFailures.unexpectedError(String message) = AddAccountUnexpectedError;
-  factory AddAccountFailures.invalidCredentials(String message) = AddAccountInvalidCredentials;
+  factory AddAccountFailures.unexpectedError(String message) =
+      AddAccountUnexpectedError;
+  factory AddAccountFailures.invalidCredentials(String message) =
+      AddAccountInvalidCredentials;
 
   R when<R>(
     R Function(EmailInUse inUse) whenEmailInUse,
@@ -13,11 +15,11 @@ class AddAccountFailures {
     R Function() orElse,
   ) {
     if (this is EmailInUse) {
-      return whenEmailInUse(this);
+      return whenEmailInUse(this as EmailInUse);
     } else if (this is AddAccountUnexpectedError) {
-      return whenUnexpectedError(this);
+      return whenUnexpectedError(this as AddAccountUnexpectedError);
     } else if (this is AddAccountInvalidCredentials) {
-      return whenInvalidCredentials(this);
+      return whenInvalidCredentials(this as AddAccountInvalidCredentials);
     } else {
       return orElse();
     }

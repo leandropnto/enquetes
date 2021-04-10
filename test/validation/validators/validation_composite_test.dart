@@ -8,10 +8,11 @@ import 'package:test/test.dart';
 class FieldValidationSpy extends Mock implements FieldValidation {}
 
 void main() {
-  FieldValidationSpy validation1;
-  FieldValidationSpy validation2;
-  FieldValidationSpy validation3;
-  ValidationComposite sut;
+  FieldValidationSpy validation1 = FieldValidationSpy();
+  FieldValidationSpy validation2 = FieldValidationSpy();
+  FieldValidationSpy validation3 = FieldValidationSpy();
+  ValidationComposite sut =
+      ValidationComposite([validation1, validation2, validation3]);
 
   void mockValidation1(Option<ValidationError> error) {
     when(validation1.validate(any)).thenReturn(error);

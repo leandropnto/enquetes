@@ -1,11 +1,10 @@
 import 'package:enquetes/domain/usecases/authentication.dart';
-import 'package:meta/meta.dart';
 
 class RemoteAuthenticationParams {
   final String email;
   final String password;
 
-  RemoteAuthenticationParams({@required this.email, @required this.password});
+  RemoteAuthenticationParams({required this.email, required this.password});
 
   factory RemoteAuthenticationParams.fromDomain(AuthenticationParams entity) =>
       RemoteAuthenticationParams(email: entity.email, password: entity.secret);

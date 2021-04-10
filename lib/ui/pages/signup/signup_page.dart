@@ -9,7 +9,7 @@ import 'signup_presenter.dart';
 class SignupPage extends StatefulWidget {
   final SignUpPresenter presenter;
 
-  const SignupPage({Key key, this.presenter}) : super(key: key);
+  const SignupPage({Key? key, required this.presenter}) : super(key: key);
 
   @override
   _SignupPageState createState() => _SignupPageState();
@@ -27,15 +27,15 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(body: Builder(
       builder: (context) {
         widget.presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading) {
+          if (isLoading ?? false) {
             showLoading(context, message: "Criando a conta...");
           } else {
             hideLoading(context);
           }
         });
 
-        widget.presenter.navigateStream.listen(
-            (page) => page?.isNotEmpty == true ? Get.offAllNamed(page) : {});
+        widget.presenter.navigateStream.listen((page) =>
+            page?.isNotEmpty == true ? Get.offAllNamed(page ?? "") : {});
         widget.presenter.mainErrorStream.listen((error) {
           if (error != null) {
             showErrorMessage(context, error.description);

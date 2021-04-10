@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
+import 'remote_authentication_params.dart';
 
 class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
@@ -12,27 +13,19 @@ class RemoteAuthentication implements Authentication {
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<Either<AuthenticationFailures, AccountEntity>> auth(AuthenticationParams params) async {
+  Future<Either<AuthenticationFailures, AccountEntity>> auth(
+      AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
-      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse =
+          await httpClient.request(url: url, method: 'post', body: body);
       return RemoteAccountModel.fromJson(httpResponse).toEntity().right();
     } on HttpError catch (error) {
       return error == HttpError.unauthorized
-          ? AuthenticationFailures.invalidCredentials(params).left() //DomainError.invalidCredentials
-          : AuthenticationFailures.unexpectedError(Exception("$error")).left(); //DomainError.unexpected;
+          ? AuthenticationFailures.invalidCredentials(params)
+              .left() //DomainError.invalidCredentials
+          : AuthenticationFailures.unexpectedError(Exception("$error"))
+              .left(); //DomainError.unexpected;
     }
   }
-}
-
-class RemoteAuthenticationParams {
-  final String email;
-  final String password;
-
-  RemoteAuthenticationParams({@required this.email, @required this.password});
-
-  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams entity) =>
-      RemoteAuthenticationParams(email: entity.email, password: entity.secret);
-
-  Map toJson() => {'email': email, 'password': password};
 }

@@ -13,7 +13,7 @@ class EmailValidation extends Equatable implements FieldValidation {
 
   @override
   Option<ValidationError> validate(String? value) {
-    return value?.isNotEmpty != true || regexp.hasMatch(value!!)
+    return value?.isNotEmpty != true || regexp.hasMatch(value!)
         ? None()
         : Some(ValidationError.invalidField);
   }

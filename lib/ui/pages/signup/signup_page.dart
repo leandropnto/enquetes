@@ -56,14 +56,10 @@ class _SignupPageState extends State<SignupPage> {
                     child: Column(
                       children: [
                         NameInput(),
-                        SizedBox(height: 16),
                         EmailInput(),
-                        SizedBox(height: 16),
                         PasswordInput(),
-                        SizedBox(height: 16),
-                        SignupButton(),
                         PasswordConfirmationInput(),
-                        SizedBox(height: 16),
+                        SignupButton(),
                         FlatButton.icon(
                           onPressed: widget.presenter.goToLogin,
                           icon: Icon(Icons.exit_to_app),

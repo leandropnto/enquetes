@@ -58,11 +58,9 @@ class _LoginPageState extends State<LoginPage> {
                         EmailInput(),
                         PasswordInput(),
                         LoginButton(),
-                        FlatButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.person),
-                          label: Text(R.strings.addAccount),
-                        )
+                        SignupButton(
+                          loginPresenter: widget.presenter,
+                        ),
                       ],
                     ),
                   ),

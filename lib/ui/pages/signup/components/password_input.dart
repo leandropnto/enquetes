@@ -9,7 +9,7 @@ class PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final presenter = Get.find<SignUpPresenter>();
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 32),
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: StreamBuilder<UIError?>(
         stream: presenter.passwordErrorStream,
         builder: (context, snapshot) {

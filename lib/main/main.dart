@@ -1,3 +1,4 @@
+import 'package:enquetes/main/factories/pages/signup/signup.dart';
 import 'package:enquetes/main/factories/pages/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,10 @@ class App extends StatelessWidget {
         GetPage(name: "/", page: makeSplashPage, transition: Transition.fade),
         GetPage(
             name: "/login", page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(
+            name: "/signup",
+            page: makeSignupPage,
+            transition: Transition.leftToRight),
         GetPage(
           name: "/surveys",
           page: () => Scaffold(

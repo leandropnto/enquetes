@@ -1,5 +1,4 @@
 import 'package:enquetes/domain/core/option.dart';
-import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -22,7 +21,7 @@ void main() {
   });
 
   test('Should have a String value', () {
-    final text = faker.person.name();
+    final text = 'leandro';
     Option<String> option = Some(text);
     expect(text, option.value);
   });

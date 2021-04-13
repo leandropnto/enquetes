@@ -2,11 +2,13 @@ import 'package:enquetes/domain/core/core.dart';
 import 'package:enquetes/infra/cache/cache.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 class FlutterSecureStorageSpy extends Mock implements FlutterSecureStorage {}
 
+@GenerateMocks([FlutterSecureStorage])
 void main() {
   //Variables
   FlutterSecureStorage secureStorage = FlutterSecureStorageSpy();
@@ -15,8 +17,7 @@ void main() {
   String key = faker.guid.guid();
   //Mocks
   void mockSaveSecureWriteError() {
-    when(secureStorage.write(
-            key: anyNamed('key') ?? "", value: anyNamed('value')))
+    when(secureStorage.write(key: "teste", value: "value"))
         .thenThrow(Exception());
   }
 

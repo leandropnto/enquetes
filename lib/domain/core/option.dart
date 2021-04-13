@@ -48,7 +48,7 @@ class Some<A> extends Option<A> {
 
   @override
   Option<R> map<R>(Function(A value) block) {
-    return isSome() ? block(value) : none();
+    return isSome() ? some(block(value)) : none();
   }
 }
 

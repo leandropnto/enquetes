@@ -11,7 +11,7 @@ import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   final Validation validation;
-  final AddAccount addAccount;
+  final AddAccountUseCase addAccount;
   final SaveCurrentAccount saveCurrentAccount;
 
   final _emailError = Rx<UIError?>(null);

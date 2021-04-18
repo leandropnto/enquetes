@@ -1,4 +1,4 @@
-class AddAccountFailures {
+abstract class AddAccountFailures {
   const AddAccountFailures._();
 
   factory AddAccountFailures.emailInUse(String email) = EmailInUse;

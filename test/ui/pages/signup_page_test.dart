@@ -125,7 +125,7 @@ void main() {
       findsOneWidget,
     );
 
-    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, isNull);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
@@ -256,7 +256,7 @@ void main() {
       isFormValidController.add(true);
       await tester.pump();
 
-      final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.onPressed, isNotNull);
     });
 
@@ -267,7 +267,7 @@ void main() {
       isFormValidController.add(false);
       await tester.pump();
 
-      final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.onPressed, null);
     });
 
@@ -277,7 +277,7 @@ void main() {
 
       isFormValidController.add(true);
       await tester.pump();
-      final button = find.byType(RaisedButton);
+      final button = find.byType(ElevatedButton);
       await tester.ensureVisible(button);
       await tester.tap(button);
       await tester.pump();

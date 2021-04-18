@@ -11,13 +11,13 @@ import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
-class AddAccountSpy extends Mock implements AddAccount {}
+class AddAccountSpy extends Mock implements AddAccountUseCase {}
 
 class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
   Validation validation = ValidationSpy();
-  AddAccount addAccount = AddAccountSpy();
+  AddAccountUseCase addAccount = AddAccountSpy();
   SaveCurrentAccountSpy saveCurrentAccount = SaveCurrentAccountSpy();
   GetxSignUpPresenter sut = GetxSignUpPresenter(
     validation: validation,

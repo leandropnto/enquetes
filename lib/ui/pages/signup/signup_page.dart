@@ -60,7 +60,7 @@ class _SignupPageState extends State<SignupPage> {
                         PasswordInput(),
                         PasswordConfirmationInput(),
                         SignupButton(),
-                        FlatButton.icon(
+                        TextButton.icon(
                           onPressed: widget.presenter.goToLogin,
                           icon: Icon(Icons.exit_to_app),
                           label: Text(R.strings.login),

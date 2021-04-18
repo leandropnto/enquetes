@@ -3,5 +3,5 @@ import 'package:enquetes/domain/usecases/add_account/add_account.dart';
 
 import '../factories.dart';
 
-AddAccount makeAddCurrentAccount() =>
+AddAccountUseCase makeAddCurrentAccount() =>
     RemoteAddAccount(httpClient: makeHttpAdapter(), url: "");
